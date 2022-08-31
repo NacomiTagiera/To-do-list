@@ -1,15 +1,13 @@
-import { Provider } from "react-redux";
-import { store } from "./app/store";
-import DrawerAppBar from "./components/TopBar";
-import { ToDoList } from "./list/ToDoList";
+import { Suspense } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { AddTaskForm } from "./form/AddTaskForm";
+import TopBar from "./components/TopBar";
+import ToDoList from "./list/ToDoList";
+import PageNotFound from "./pageNotFound/PageNotFound";
 
 function App() {
-  return (
-    <Provider store={store}>
-      <DrawerAppBar />
-      <ToDoList />
-    </Provider>
-  );
+  return <AddTaskForm />;
 }
 
 export default App;

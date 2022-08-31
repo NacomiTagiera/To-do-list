@@ -11,7 +11,7 @@ import {
   GridLinkOperator,
 } from "@mui/x-data-grid";
 import { Box, Pagination, Typography } from "@mui/material";
-import { Done, Edit, HighlightOff, Visibility } from "@mui/icons-material";
+import { Edit, HighlightOff, Visibility } from "@mui/icons-material";
 
 import { ToDoDetails } from "./ToDoDetails";
 import { useDispatchTodos, useGetTodos } from "./todosSlice";
@@ -54,7 +54,7 @@ function CustomPagination() {
   );
 }
 
-export const ToDoList = () => {
+const ToDoList = () => {
   const todos: Todo[] = useGetTodos();
   const { deleteTodo } = useDispatchTodos();
 
@@ -158,11 +158,7 @@ export const ToDoList = () => {
 
   return (
     <>
-      <Typography
-        variant="h1"
-        component="h1"
-        sx={{ textAlign: "center", my: 5 }}
-      >
+      <Typography variant="h1" component="h1" sx={{ textAlign: "center", my: 5 }}>
         My to-do list
       </Typography>
       <DataGrid
@@ -187,10 +183,9 @@ export const ToDoList = () => {
         disableSelectionOnClick={true}
         sx={styledDataGrid}
       />
-      <ToDoDetails
-        todo={todoDetails}
-        onClose={() => setTodoDetails(undefined)}
-      />
+      <ToDoDetails todo={todoDetails} onClose={() => setTodoDetails(undefined)} />
     </>
   );
 };
+
+export default ToDoList;
