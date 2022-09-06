@@ -1,4 +1,8 @@
-import { bindActionCreators, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  bindActionCreators,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 
 import { useAppSelector, useAppDispatch } from "../app/hooks";
 import { Todo } from "./types/Todo";
@@ -11,7 +15,7 @@ const initialState: Todos = {
       category: "Dom",
       value: "Posprzątać swój pokój",
       priority: "Normal",
-      createdAt: "2022-08-29T11:37:34+00:00",
+      createdAt: "25/8/2022",
       isDone: false,
     },
     {
@@ -19,7 +23,7 @@ const initialState: Todos = {
       category: "Jedzenie",
       value: "Zrobić zakupy",
       priority: "Major",
-      createdAt: "2022-08-30T09:25:43+00:00",
+      createdAt: "26/8/2022",
       isDone: false,
     },
     {
@@ -27,7 +31,7 @@ const initialState: Todos = {
       category: "Zdrowie",
       value: "Pójść do lekarza",
       priority: "Critical",
-      createdAt: "2022-08-31T20:01:11+00:00",
+      createdAt: "27/8/2022",
       isDone: false,
     },
   ],
@@ -55,7 +59,8 @@ export const todosSlice = createSlice({
   },
 });
 
-export const useGetTodos = (): Todo[] => useAppSelector((state) => state.todos.todos);
+export const useGetTodos = (): Todo[] =>
+  useAppSelector((state) => state.todos.todos);
 export const useGetTodo = (todoId: number): Todo | undefined => {
   return useGetTodos().find((todo) => todo.id === todoId);
 };

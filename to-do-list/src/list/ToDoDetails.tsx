@@ -13,15 +13,24 @@ export const ToDoDetails = ({ todo, onClose }: Props) => {
       <Paper variant="elevation" sx={{ py: 5, px: 3 }}>
         {todo ? (
           <>
-            <Typography variant="h3" component="h3" sx={{ textAlign: "center", pb: 1 }}>
+            <Typography
+              variant="h3"
+              component="h3"
+              sx={{ textAlign: "center", pb: 1 }}
+            >
               Details
             </Typography>
             <Typography>Category: {todo.category}</Typography>
             <Typography>Value: {todo.value}</Typography>
             <Typography>Priority: {todo.priority}</Typography>
-            <Typography>Created: {new Date(todo.createdAt).toLocaleString()}</Typography>
-            <Typography>Status: {todo.isDone ? "Done" : "In progress"}</Typography>
-            <Button sx={{ display: "block", mx: "auto", mt: 1 }} onClick={onClose}>
+            <Typography>
+              Created: {new Date(todo.createdAt).toLocaleDateString()}
+            </Typography>
+            <Typography>Status: {todo.isDone}</Typography>
+            <Button
+              sx={{ display: "block", mx: "auto", mt: 1 }}
+              onClick={onClose}
+            >
               Close
             </Button>
           </>

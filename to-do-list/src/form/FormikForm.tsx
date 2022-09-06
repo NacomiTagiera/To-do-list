@@ -16,11 +16,12 @@ import {
   Typography,
 } from "@mui/material";
 
-import { Form } from "formik";
+import { Form, useFormikContext } from "formik";
 import FormikField from "../components/FormikField";
 
 export const FormikForm = () => {
-  const [priority, setPriority] = useState<string>("normal");
+  const [priority, setPriority] = useState<string>("Normal");
+  const { resetForm } = useFormikContext();
   const theme = createTheme();
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -44,14 +45,22 @@ export const FormikForm = () => {
             Add new task
           </Typography>
           <Form noValidate>
-            <Grid container rowSpacing={2} columnSpacing={0}>
+            <Grid container spacing={2}>
               <Grid item xs={10} sm={8}>
-                <FormikField fieldName="Category" label="Category" placeholder="e.g. School, Cleaning, Health" />
+                <FormikField
+                  fieldName="category"
+                  label="category"
+                  placeholder="e.g. School, Cleaning, Health"
+                />
               </Grid>
-              <Grid item>
-                <FormControl fullWidth>
+              <Grid item xs={2} sm={4}>
+                <FormControl>
                   <InputLabel>Priority</InputLabel>
-                  <Select defaultValue="Normal" value={priority} label="Priority" onChange={handleChange}>
+                  <Select
+                    value={priority}
+                    label="Priority"
+                    onChange={handleChange}
+                  >
                     <MenuItem value="Critical">Critical</MenuItem>
                     <MenuItem value="Major">Major</MenuItem>
                     <MenuItem value="Normal">Normal</MenuItem>
@@ -61,14 +70,18 @@ export const FormikForm = () => {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormikField fieldName="Value" label="Value" placeholder="Task content" />
+                <FormikField
+                  fieldName="value"
+                  label="value"
+                  placeholder="Task content"
+                />
               </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, width: "max-content", display: "block", mx: "auto" }}
+              sx={{ mt: 3, mb: 2 }}
             >
               Submit
             </Button>

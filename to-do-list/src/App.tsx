@@ -1,13 +1,23 @@
-import { Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import DrawerAppBar from "./components/TopBar";
+import { ToDoList } from "./list/ToDoList";
+import { AddTaskPanel } from "./pages/AddTaskPanel";
+import PageNotFound from "./pages/PageNotFound";
+import { HomePage } from "./pages/HomePage";
 
-import { AddTaskForm } from "./form/AddTaskForm";
-import TopBar from "./components/TopBar";
-import ToDoList from "./list/ToDoList";
-import PageNotFound from "./pageNotFound/PageNotFound";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
-  return <AddTaskForm />;
+  return (
+    <>
+      <DrawerAppBar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/list" element={<ToDoList />} />
+        <Route path="/add" element={<AddTaskPanel />} />
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </>
+  );
 }
 
 export default App;
