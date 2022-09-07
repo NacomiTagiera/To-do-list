@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   AppBar,
   Box,
@@ -23,6 +25,7 @@ const drawerWidth = 240;
 const navItems = ["Home", "List", "Add new task"];
 
 export default function DrawerAppBar(props: Props) {
+  const navigate = useNavigate();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -30,20 +33,40 @@ export default function DrawerAppBar(props: Props) {
     setMobileOpen(!mobileOpen);
   };
 
+  const date = new Date().toISOString();
+  const currentDate = new Date(date).toLocaleDateString();
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" component="h6" sx={{ my: 2 }}>
-        My to-do list
+        {currentDate}
       </Typography>
       <Divider />
       <List>
-        {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{ textAlign: "center" }}
+            onClick={() => navigate("/")}
+          >
+            <ListItemText primary="Home" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{ textAlign: "center" }}
+            onClick={() => navigate("/list")}
+          >
+            <ListItemText primary="To-do list" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{ textAlign: "center" }}
+            onClick={() => navigate("/add")}
+          >
+            <ListItemText primary="Add task" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
@@ -69,14 +92,18 @@ export default function DrawerAppBar(props: Props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            My to-do list
+            {currentDate}
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: "#fff" }}>
-                {item}
-              </Button>
-            ))}
+            <Button sx={{ color: "#fff" }} onClick={() => navigate("/")}>
+              Home
+            </Button>
+            <Button sx={{ color: "#fff" }} onClick={() => navigate("/list")}>
+              To-do list
+            </Button>
+            <Button sx={{ color: "#fff" }} onClick={() => navigate("/add")}>
+              Add new task
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>

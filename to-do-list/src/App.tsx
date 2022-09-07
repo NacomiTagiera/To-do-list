@@ -1,5 +1,5 @@
 import DrawerAppBar from "./components/TopBar";
-import { ToDoList } from "./list/ToDoList";
+import { ToDoList } from "./pages/ToDoList";
 import { AddTaskPanel } from "./pages/AddTaskPanel";
 import PageNotFound from "./pages/PageNotFound";
 import { HomePage } from "./pages/HomePage";

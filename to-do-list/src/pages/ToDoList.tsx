@@ -11,11 +11,10 @@ import {
   GridLinkOperator,
 } from "@mui/x-data-grid";
 import { Box, Pagination, Typography } from "@mui/material";
-import { Done, Edit, HighlightOff, Visibility } from "@mui/icons-material";
+import { Done, Edit, HighlightOff } from "@mui/icons-material";
 
-import { ToDoDetails } from "./ToDoDetails";
-import { useDispatchTodos, useGetTodos } from "./todosSlice";
-import { Todo } from "./types/Todo";
+import { useDispatchTodos, useGetTodos } from "../list/todosSlice";
+import { Todo } from "../list/types/Todo";
 
 function QuickSearchToolbar() {
   return (
@@ -59,7 +58,6 @@ export const ToDoList = () => {
   const { deleteTodo } = useDispatchTodos();
 
   const [todoToEdit, setTodoToEdit] = useState<Todo | undefined>(undefined);
-  const [todoDetails, setTodoDetails] = useState<Todo | undefined>(undefined);
 
   const styledDataGrid = {
     "& .MuiDataGrid-virtualScrollerRenderZone": {
@@ -142,14 +140,6 @@ export const ToDoList = () => {
                 });
               }}
             />
-            <Visibility
-              sx={iconStyles}
-              onClick={() => {
-                todos.forEach((todo) => {
-                  if (cellValues.row.id === todo.id) setTodoDetails(todo);
-                });
-              }}
-            />
           </>
         );
       },
@@ -186,10 +176,6 @@ export const ToDoList = () => {
         disableColumnMenu={true}
         disableSelectionOnClick={true}
         sx={styledDataGrid}
-      />
-      <ToDoDetails
-        todo={todoDetails}
-        onClose={() => setTodoDetails(undefined)}
       />
     </>
   );
