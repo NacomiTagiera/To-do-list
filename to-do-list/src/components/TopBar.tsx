@@ -22,7 +22,6 @@ interface Props {
 }
 
 const drawerWidth = 240;
-const navItems = ["Home", "List", "Add new task"];
 
 export default function DrawerAppBar(props: Props) {
   const navigate = useNavigate();
@@ -33,13 +32,13 @@ export default function DrawerAppBar(props: Props) {
     setMobileOpen(!mobileOpen);
   };
 
-  const date = new Date().toISOString();
-  const currentDate = new Date(date).toLocaleDateString();
+  const currentDate = new Date().toISOString();
+  const formattedDate = new Date(currentDate).toLocaleDateString();
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" component="h6" sx={{ my: 2 }}>
-        {currentDate}
+        {formattedDate}
       </Typography>
       <Divider />
       <List>
@@ -92,7 +91,7 @@ export default function DrawerAppBar(props: Props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            {currentDate}
+            {formattedDate}
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             <Button sx={{ color: "#fff" }} onClick={() => navigate("/")}>

@@ -26,7 +26,7 @@ function QuickSearchToolbar() {
       }}
     >
       <GridToolbarQuickFilter
-        placeholder="Szukaj..."
+        placeholder="Search..."
         quickFilterParser={(searchInput: string) =>
           searchInput
             .split(",")
@@ -70,6 +70,14 @@ export const ToDoList = () => {
       color: "rgba(0,0,255,0.6)",
       fontSize: 16,
     },
+    "& .MuiDataGrid-cell:hover": {
+      color: "primary.main",
+    },
+    boxShadow: 23,
+    border: 2,
+    borderColor: "primary.light",
+    width: "max(700px, 100vw)",
+    mx: "auto",
   };
 
   const iconStyles = {
@@ -83,24 +91,16 @@ export const ToDoList = () => {
 
   const columns: GridColDef[] = [
     {
-      field: "id",
-      headerName: "ID",
-      type: "number",
+      field: "category",
+      headerName: "Category",
+      type: "string",
       flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
-      field: "category",
-      headerName: "Category",
-      type: "string",
-      flex: 2,
-      align: "center",
-      headerAlign: "center",
-    },
-    {
       field: "value",
-      headerName: "Value",
+      headerName: "Task",
       type: "string",
       flex: 2.5,
       align: "center",
@@ -110,14 +110,34 @@ export const ToDoList = () => {
       field: "priority",
       headerName: "Priority",
       type: "string",
-      flex: 2,
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "createdAt",
+      headerName: "Creation date",
+      type: "dateTime",
+      valueGetter: ({ value }) => value && new Date(value),
+      flex: 1.5,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "isDone",
+      headerName: "Status",
+      //type: 'boolean', nie dodałem tej linijki, ponieważ wtedy w kolumnie Status zamiast Done lub In progress mam symbol ptaszka albo X, a tego nie chcę
+      valueFormatter({ value }) {
+        return value === true ? "Done" : "In progress";
+      },
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "actions",
       headerName: "Actions",
-      flex: 2,
+      flex: 0.5,
       sortable: false,
       align: "center",
       headerAlign: "center",
@@ -153,7 +173,7 @@ export const ToDoList = () => {
         component="h1"
         sx={{ textAlign: "center", my: 5 }}
       >
-        My to-do list
+        To-do list
       </Typography>
       <DataGrid
         initialState={{

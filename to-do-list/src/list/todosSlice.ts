@@ -15,7 +15,7 @@ const initialState: Todos = {
       category: "Dom",
       value: "Posprzątać swój pokój",
       priority: "Normal",
-      createdAt: "25/8/2022",
+      createdAt: "2022-09-06T10:01:24.212Z",
       isDone: false,
     },
     {
@@ -23,7 +23,7 @@ const initialState: Todos = {
       category: "Jedzenie",
       value: "Zrobić zakupy",
       priority: "Major",
-      createdAt: "26/8/2022",
+      createdAt: "2022-09-07T10:02:24.212Z",
       isDone: false,
     },
     {
@@ -31,7 +31,7 @@ const initialState: Todos = {
       category: "Zdrowie",
       value: "Pójść do lekarza",
       priority: "Critical",
-      createdAt: "27/8/2022",
+      createdAt: "2022-08-08T10:03:24.212Z",
       isDone: false,
     },
   ],
