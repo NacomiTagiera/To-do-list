@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, Box, Collapse } from "@mui/material";
+import { Alert, Box, Collapse, SelectChangeEvent } from "@mui/material";
 
 import { Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
@@ -57,22 +57,25 @@ export const AddTaskPanel = () => {
     category: Yup.string()
       .label("Category")
       .required()
-      .trim("This field cannot include leading and trailing spaces")
+      .trim("Incorrect format")
       .strict(true)
       .min(3)
-      .max(30),
+      .max(25),
     value: Yup.string()
       .label("Task")
       .required()
-      .trim("This field cannot include leading and trailing spaces")
+      .trim("Incorrect format")
       .strict(true)
       .min(3)
-      .max(50)
-      .notOneOf(todos.map((todo) => todo.value)),
+      .max(60)
+      .notOneOf(
+        todos.map((todo) => todo.value),
+        "This task already exists"
+      ),
   });
 
   return (
-    <Box sx={{ m: 2, p: 3, width: 500 }}>
+    <Box sx={{ mx: "auto", width: { xs: "100vw", md: "max-content" } }}>
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}

@@ -55,7 +55,7 @@ function CustomPagination() {
 
 export const ToDoList = () => {
   const todos: Todo[] = useGetTodos();
-  const { deleteTodo } = useDispatchTodos();
+  const { deleteTodo, toggleIsDone } = useDispatchTodos();
 
   const [todoToEdit, setTodoToEdit] = useState<Todo | undefined>(undefined);
 
@@ -67,7 +67,7 @@ export const ToDoList = () => {
     },
     "& .MuiDataGrid-columnHeaders": {
       backgroundColor: "rgba(235, 235, 235, .7)",
-      color: "rgba(0,0,255,0.6)",
+      color: "rgba(0, 0, 255, .6)",
       fontSize: 16,
     },
     "& .MuiDataGrid-cell:hover": {
@@ -144,11 +144,11 @@ export const ToDoList = () => {
       renderCell(cellValues) {
         return (
           <>
-            <HighlightOff
-              color="error"
+            <Done
+              color="success"
               sx={iconStyles}
               onClick={() => {
-                deleteTodo(cellValues.row.id);
+                toggleIsDone(cellValues.row.id);
               }}
             />
             <Edit
@@ -158,6 +158,13 @@ export const ToDoList = () => {
                 todos.forEach((todo) => {
                   if (cellValues.row.id === todo.id) setTodoToEdit(todo);
                 });
+              }}
+            />
+            <HighlightOff
+              color="error"
+              sx={iconStyles}
+              onClick={() => {
+                deleteTodo(cellValues.row.id);
               }}
             />
           </>

@@ -16,12 +16,11 @@ import {
   Typography,
 } from "@mui/material";
 
-import { Form, useFormikContext } from "formik";
+import { Form } from "formik";
 import FormikField from "../components/FormikField";
 
 export const FormikForm = () => {
   const [priority, setPriority] = useState<string>("Normal");
-  const { resetForm } = useFormikContext();
   const theme = createTheme();
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -30,7 +29,7 @@ export const FormikForm = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main">
         <CssBaseline />
         <Box
           sx={{
@@ -41,7 +40,11 @@ export const FormikForm = () => {
             justifyContent: "center",
           }}
         >
-          <Typography variant="h1" component="h1" sx={{ mb: 2 }}>
+          <Typography
+            variant="h1"
+            component="h1"
+            sx={{ mb: 5, textAlign: "center" }}
+          >
             Add new task
           </Typography>
           <Form noValidate>
@@ -77,12 +80,7 @@ export const FormikForm = () => {
                 />
               </Grid>
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
+            <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
               Submit
             </Button>
           </Form>

@@ -56,6 +56,11 @@ export const todosSlice = createSlice({
         }
       });
     },
+    toggleIsDone: (state, action: PayloadAction<Todo["id"]>) => {
+      state.todos.forEach((todo) => {
+        if (todo.id === action.payload) todo.isDone = !todo.isDone;
+      });
+    },
   },
 });
 

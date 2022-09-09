@@ -34,6 +34,7 @@ const FormikField: React.FC<Props> = ({
       onChange={field.onChange}
       onBlur={field.onBlur}
       type={fieldType}
+      autoComplete="off"
     />
   );
 };
