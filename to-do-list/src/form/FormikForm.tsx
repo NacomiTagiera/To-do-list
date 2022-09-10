@@ -52,7 +52,7 @@ export const FormikForm = () => {
               <Grid item xs={10} sm={8}>
                 <FormikField
                   fieldName="category"
-                  label="category"
+                  label="Category"
                   placeholder="e.g. School, Cleaning, Health"
                 />
               </Grid>
@@ -75,8 +75,8 @@ export const FormikForm = () => {
               <Grid item xs={12}>
                 <FormikField
                   fieldName="value"
-                  label="value"
-                  placeholder="Task content"
+                  label="Task"
+                  placeholder="Task"
                 />
               </Grid>
             </Grid>
