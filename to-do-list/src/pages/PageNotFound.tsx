@@ -11,7 +11,7 @@ export default function PageNotFound() {
       }}
     >
       <Typography variant="h1" component="h1">
-        Page not found
+        404 Page not found
       </Typography>
     </Box>
   );

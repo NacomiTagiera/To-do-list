@@ -1,4 +1,4 @@
-import DrawerAppBar from "./components/TopBar";
+import Navbar from "./components/Navbar";
 import { ToDoList } from "./pages/ToDoList";
 import { AddTaskPanel } from "./pages/AddTaskPanel";
 import PageNotFound from "./pages/PageNotFound";
@@ -9,7 +9,7 @@ import { Routes, Route } from "react-router-dom";
 function App() {
   return (
     <>
-      <DrawerAppBar />
+      <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/list" element={<ToDoList />} />

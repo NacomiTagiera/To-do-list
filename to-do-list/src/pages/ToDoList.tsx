@@ -15,6 +15,7 @@ import { Done, Edit, HighlightOff } from "@mui/icons-material";
 
 import { useDispatchTodos, useGetTodos } from "../list/todosSlice";
 import { Todo } from "../list/types/Todo";
+import EditTodo from "./EditTodo";
 
 function QuickSearchToolbar() {
   return (
@@ -204,6 +205,7 @@ export const ToDoList = () => {
         disableSelectionOnClick={true}
         sx={styledDataGrid}
       />
+      <EditTodo todo={todoToEdit} onClose={() => setTodoToEdit(undefined)} />
     </>
   );
 };

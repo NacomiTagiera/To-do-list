@@ -23,7 +23,7 @@ interface Props {
 
 const drawerWidth = 240;
 
-export default function DrawerAppBar(props: Props) {
+export default function Navbar(props: Props) {
   const navigate = useNavigate();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);

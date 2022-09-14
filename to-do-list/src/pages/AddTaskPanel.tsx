@@ -23,11 +23,20 @@ import { Todo } from "../list/types/Todo";
 import { TodoFormikValues } from "../form/types/TodoFormikValues";
 import { useDispatchTodos, useGetTodos } from "../list/todosSlice";
 
-export const AddTaskPanel = () => {
+interface Props {
+  isInEditTodo?: boolean;
+  todo?: Todo;
+}
+
+export const AddTaskPanel = ({ todo }: Props) => {
   const theme = createTheme();
 
-  const [priority, setPriority] = useState<string>("Normal");
+  const [priority, setPriority] = useState<string>(
+    !!todo ? todo.priority : "Normal"
+  );
   const [displayTodoAddedInfo, setDisplayTodoAddedInfo] =
+    useState<boolean>(false);
+  const [displayTodoEditedInfo, setDisplayTodoEditedInfo] =
     useState<boolean>(false);
 
   const handlePriorityChange = (event: SelectChangeEvent) => {
@@ -35,16 +44,15 @@ export const AddTaskPanel = () => {
   };
 
   const initialValues: TodoFormikValues = {
-    category: "",
-    priority: "Normal",
-    value: "",
+    category: todo?.category || "",
+    value: todo?.value || "",
   };
 
   const todos: Todo[] = useGetTodos();
-  const { addTodo } = useDispatchTodos();
+  const { addTodo, editTodo } = useDispatchTodos();
 
   const getFreeId = (todos: Todo[]): number => {
-    return todos ? Math.max(...todos.map((todo) => todo.id)) + 1 : 0;
+    return !!todos ? Math.max(...todos.map((todo) => todo.id)) + 1 : 0;
   };
 
   const createTodo = (
@@ -69,9 +77,19 @@ export const AddTaskPanel = () => {
     values: TodoFormikValues,
     actions: FormikHelpers<TodoFormikValues>
   ) => {
-    actions.resetForm();
-    addTodo(createTodo(values.category, priority, values.value, todos));
-    setDisplayTodoAddedInfo(true);
+    if (!!todo) {
+      setDisplayTodoEditedInfo(true);
+      editTodo({
+        ...todo,
+        category: values.category,
+        value: values.value,
+        priority: priority,
+      });
+    } else {
+      setDisplayTodoAddedInfo(true);
+      addTodo(createTodo(values.category, priority, values.value, todos));
+      actions.resetForm();
+    }
   };
 
   const validationSchema = Yup.object({
@@ -117,7 +135,7 @@ export const AddTaskPanel = () => {
               component="h1"
               sx={{ mb: 5, textAlign: "center" }}
             >
-              Add new task
+              {!!todo ? "Edit task" : "Add new task"}
             </Typography>
             <Form noValidate>
               <Stack
@@ -129,7 +147,7 @@ export const AddTaskPanel = () => {
                 <FormikField
                   fieldName="category"
                   label="Category"
-                  placeholder="e.g. School, Cleaning, Health"
+                  placeholder="e.g. School, Health, Home"
                 />
 
                 <FormikField
@@ -164,6 +182,14 @@ export const AddTaskPanel = () => {
             onClose={() => setDisplayTodoAddedInfo(false)}
           >
             Todo was successfully added!
+          </Alert>
+        </Collapse>
+        <Collapse in={displayTodoEditedInfo} mountOnEnter unmountOnExit>
+          <Alert
+            severity="success"
+            onClose={() => setDisplayTodoEditedInfo(false)}
+          >
+            Todo was successfully edited!
           </Alert>
         </Collapse>
       </Box>
