@@ -28,16 +28,13 @@ interface Props {
   todo?: Todo;
 }
 
-export const AddTaskPanel = ({ todo }: Props) => {
+export const AddTaskPanel = ({ isInEditTodo = false, todo }: Props) => {
   const theme = createTheme();
 
   const [priority, setPriority] = useState<string>(
     !!todo ? todo.priority : "Normal"
   );
-  const [displayTodoAddedInfo, setDisplayTodoAddedInfo] =
-    useState<boolean>(false);
-  const [displayTodoEditedInfo, setDisplayTodoEditedInfo] =
-    useState<boolean>(false);
+  const [displayInfo, setDisplayInfo] = useState<boolean>(false);
 
   const handlePriorityChange = (event: SelectChangeEvent) => {
     setPriority(event.target.value as string);
@@ -78,7 +75,6 @@ export const AddTaskPanel = ({ todo }: Props) => {
     actions: FormikHelpers<TodoFormikValues>
   ) => {
     if (!!todo) {
-      setDisplayTodoEditedInfo(true);
       editTodo({
         ...todo,
         category: values.category,
@@ -86,10 +82,10 @@ export const AddTaskPanel = ({ todo }: Props) => {
         priority: priority,
       });
     } else {
-      setDisplayTodoAddedInfo(true);
       addTodo(createTodo(values.category, priority, values.value, todos));
       actions.resetForm();
     }
+    setDisplayInfo(true);
   };
 
   const validationSchema = Yup.object({
@@ -176,20 +172,11 @@ export const AddTaskPanel = ({ todo }: Props) => {
             </Form>
           </Box>
         </Formik>
-        <Collapse in={displayTodoAddedInfo} mountOnEnter unmountOnExit>
-          <Alert
-            severity="success"
-            onClose={() => setDisplayTodoAddedInfo(false)}
-          >
-            Todo was successfully added!
-          </Alert>
-        </Collapse>
-        <Collapse in={displayTodoEditedInfo} mountOnEnter unmountOnExit>
-          <Alert
-            severity="success"
-            onClose={() => setDisplayTodoEditedInfo(false)}
-          >
-            Todo was successfully edited!
+        <Collapse in={displayInfo} mountOnEnter unmountOnExit>
+          <Alert severity="success" onClose={() => setDisplayInfo(false)}>
+            {isInEditTodo
+              ? "Todo was successfully edited!"
+              : "Todo was successfully added!"}
           </Alert>
         </Collapse>
       </Box>

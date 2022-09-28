@@ -29,7 +29,7 @@ export default function Navbar(props: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+    setMobileOpen((prevState) => !prevState);
   };
 
   const currentDate = new Date().toISOString();

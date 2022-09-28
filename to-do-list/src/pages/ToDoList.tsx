@@ -68,7 +68,7 @@ export const ToDoList = () => {
     },
     "& .MuiDataGrid-columnHeaders": {
       backgroundColor: "rgba(235, 235, 235, .7)",
-      color: "rgba(0, 0, 255, .6)",
+      color: "primary.light",
       fontSize: 16,
     },
     "& .MuiDataGrid-cell:hover": {
@@ -77,16 +77,16 @@ export const ToDoList = () => {
     boxShadow: 23,
     border: 2,
     borderColor: "primary.light",
-    width: "max(700px, 100vw)",
+    width: "max(1000px, 100%)",
     mx: "auto",
   };
 
   const iconStyles = {
     transition: ".3s",
     "&:hover": {
-      opacity: "0.8",
+      opacity: "0.7",
       cursor: "pointer",
-      transform: "scale(0.98)",
+      transform: "scale(0.95)",
     },
   };
 
@@ -148,25 +148,24 @@ export const ToDoList = () => {
             <Done
               color="success"
               sx={iconStyles}
-              onClick={() => {
-                toggleIsDone(cellValues.row.id);
-              }}
+              onClick={() => toggleIsDone(cellValues.row.id)}
             />
             <Edit
               color="primary"
               sx={iconStyles}
               onClick={() => {
-                todos.forEach((todo) => {
-                  if (cellValues.row.id === todo.id) setTodoToEdit(todo);
-                });
+                for (const todo of todos) {
+                  if (cellValues.row.id === todo.id) {
+                    setTodoToEdit(todo);
+                    break;
+                  }
+                }
               }}
             />
             <HighlightOff
               color="error"
               sx={iconStyles}
-              onClick={() => {
-                deleteTodo(cellValues.row.id);
-              }}
+              onClick={() => deleteTodo(cellValues.row.id)}
             />
           </>
         );
