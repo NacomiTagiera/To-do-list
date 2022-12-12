@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Box, Button, Stack, Typography } from "@mui/material";
 
-export const HomePage = () => {
+export default function HomePage() {
   const navigate = useNavigate();
 
   return (
@@ -40,4 +40,4 @@ export const HomePage = () => {
       </Stack>
     </Box>
   );
-};
+}

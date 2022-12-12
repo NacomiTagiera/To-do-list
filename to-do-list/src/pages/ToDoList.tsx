@@ -54,7 +54,7 @@ function CustomPagination() {
   );
 }
 
-export const ToDoList = () => {
+export default function ToDoList() {
   const todos: Todo[] = useGetTodos();
   const { deleteTodo, toggleIsDone } = useDispatchTodos();
 
@@ -127,9 +127,9 @@ export const ToDoList = () => {
     {
       field: "isDone",
       headerName: "Status",
-      //type: 'boolean', nie dodałem tej linijki, ponieważ wtedy w kolumnie Status zamiast Done lub In progress mam symbol ptaszka albo X, a tego nie chcę
+      type: "string",
       valueFormatter({ value }) {
-        return value === true ? "Done" : "In progress";
+        return value ? "Done" : "In progress";
       },
       flex: 1,
       align: "center",
@@ -175,11 +175,7 @@ export const ToDoList = () => {
 
   return (
     <>
-      <Typography
-        variant="h1"
-        component="h1"
-        sx={{ textAlign: "center", my: 5 }}
-      >
+      <Typography variant="h1" component="h1" my={5} textAlign="center">
         To-do list
       </Typography>
       <DataGrid
@@ -199,12 +195,12 @@ export const ToDoList = () => {
         rows={todos}
         columns={columns}
         pageSize={10}
-        autoHeight={true}
-        disableColumnMenu={true}
-        disableSelectionOnClick={true}
+        autoHeight
+        disableColumnMenu
+        disableSelectionOnClick
         sx={styledDataGrid}
       />
       <EditTodo todo={todoToEdit} onClose={() => setTodoToEdit(undefined)} />
     </>
   );
-};
+}

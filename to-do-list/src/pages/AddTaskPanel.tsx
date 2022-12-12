@@ -28,7 +28,7 @@ interface Props {
   todo?: Todo;
 }
 
-export const AddTaskPanel = ({ isInEditTodo = false, todo }: Props) => {
+export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
   const theme = createTheme();
 
   const [priority, setPriority] = useState<string>(
@@ -166,7 +166,7 @@ export const AddTaskPanel = ({ isInEditTodo = false, todo }: Props) => {
                   </Select>
                 </FormControl>
                 <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-                  Submit
+                  {todo ? "Save" : "Submit"}
                 </Button>
               </Stack>
             </Form>
@@ -182,4 +182,4 @@ export const AddTaskPanel = ({ isInEditTodo = false, todo }: Props) => {
       </Box>
     </ThemeProvider>
   );
-};
+}

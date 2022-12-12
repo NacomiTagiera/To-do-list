@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -23,10 +23,9 @@ interface Props {
 
 const drawerWidth = 240;
 
-export default function Navbar(props: Props) {
+export default function Navbar({ window }: Props) {
   const navigate = useNavigate();
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -53,7 +52,7 @@ export default function Navbar(props: Props) {
         <ListItem disablePadding>
           <ListItemButton
             sx={{ textAlign: "center" }}
-            onClick={() => navigate("/list")}
+            onClick={() => navigate("list")}
           >
             <ListItemText primary="To-do list" />
           </ListItemButton>
@@ -61,7 +60,7 @@ export default function Navbar(props: Props) {
         <ListItem disablePadding>
           <ListItemButton
             sx={{ textAlign: "center" }}
-            onClick={() => navigate("/add")}
+            onClick={() => navigate("add")}
           >
             <ListItemText primary="Add task" />
           </ListItemButton>
@@ -97,10 +96,10 @@ export default function Navbar(props: Props) {
             <Button sx={{ color: "#fff" }} onClick={() => navigate("/")}>
               Home
             </Button>
-            <Button sx={{ color: "#fff" }} onClick={() => navigate("/list")}>
+            <Button sx={{ color: "#fff" }} onClick={() => navigate("list")}>
               To-do list
             </Button>
-            <Button sx={{ color: "#fff" }} onClick={() => navigate("/add")}>
+            <Button sx={{ color: "#fff" }} onClick={() => navigate("add")}>
               Add new task
             </Button>
           </Box>

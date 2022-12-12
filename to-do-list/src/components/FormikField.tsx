@@ -1,8 +1,5 @@
-import React from "react";
-
-import { TextField } from "@mui/material";
-
 import { useField } from "formik";
+import { TextField } from "@mui/material";
 
 type Props = {
   fieldName: string;
@@ -12,13 +9,13 @@ type Props = {
   fieldType?: string;
 };
 
-const FormikField: React.FC<Props> = ({
+export default function FormikField({
   fieldName,
   label,
   placeholder,
   required = true,
   fieldType = "text",
-}) => {
+}: Props) {
   const [field, meta] = useField(fieldName);
 
   return (
@@ -37,6 +34,4 @@ const FormikField: React.FC<Props> = ({
       autoComplete="off"
     />
   );
-};
-
-export default FormikField;
+}

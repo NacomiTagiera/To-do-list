@@ -10,8 +10,8 @@ export default function PageNotFound() {
         alignItems: "center",
       }}
     >
-      <Typography variant="h1" component="h1">
-        404 Page not found
+      <Typography variant="h1" component="h1" p={5} textAlign="center">
+        Sorry, the page you're trying to reach doesn't exist
       </Typography>
     </Box>
   );

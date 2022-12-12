@@ -1,7 +1,7 @@
 import { Card, Dialog } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-import { AddTaskPanel } from "./AddTaskPanel";
+import AddTaskPanel from "./AddTaskPanel";
 import { Todo } from "../list/types/Todo";
 
 interface Props {
@@ -12,13 +12,7 @@ interface Props {
 export default function EditTodo({ todo, onClose }: Props) {
   return (
     <Dialog open={!!todo} onClose={onClose}>
-      <Card
-        variant="outlined"
-        sx={{
-          px: 3,
-          py: 5,
-        }}
-      >
+      <Card variant="outlined" sx={{ p: 3 }}>
         <AddTaskPanel isInEditTodo={true} todo={todo} />
         <CancelIcon
           color="action"
