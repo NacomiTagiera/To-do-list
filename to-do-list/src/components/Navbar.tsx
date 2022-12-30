@@ -44,15 +44,7 @@ export default function Navbar({ window }: Props) {
         <ListItem disablePadding>
           <ListItemButton
             sx={{ textAlign: "center" }}
-            onClick={() => navigate("/")}
-          >
-            <ListItemText primary="Home" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton
-            sx={{ textAlign: "center" }}
-            onClick={() => navigate("list")}
+            onClick={() => navigate("/todo-list")}
           >
             <ListItemText primary="To-do list" />
           </ListItemButton>
@@ -60,7 +52,7 @@ export default function Navbar({ window }: Props) {
         <ListItem disablePadding>
           <ListItemButton
             sx={{ textAlign: "center" }}
-            onClick={() => navigate("add")}
+            onClick={() => navigate("/add-task")}
           >
             <ListItemText primary="Add task" />
           </ListItemButton>
@@ -75,7 +67,7 @@ export default function Navbar({ window }: Props) {
   return (
     <Box sx={{ display: "flex", mb: 15 }}>
       <AppBar component="nav">
-        <Toolbar>
+        <Toolbar sx={{ backgroundColor: "#8a2b06" }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -93,13 +85,16 @@ export default function Navbar({ window }: Props) {
             {formattedDate}
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            <Button sx={{ color: "#fff" }} onClick={() => navigate("/")}>
-              Home
-            </Button>
-            <Button sx={{ color: "#fff" }} onClick={() => navigate("list")}>
+            <Button
+              sx={{ color: "#fff" }}
+              onClick={() => navigate("/todo-list")}
+            >
               To-do list
             </Button>
-            <Button sx={{ color: "#fff" }} onClick={() => navigate("add")}>
+            <Button
+              sx={{ color: "#fff" }}
+              onClick={() => navigate("/add-task")}
+            >
               Add new task
             </Button>
           </Box>
@@ -117,6 +112,7 @@ export default function Navbar({ window }: Props) {
           sx={{
             display: { xs: "block", sm: "none" },
             "& .MuiDrawer-paper": {
+              backgroundColor: "darkgray",
               boxSizing: "border-box",
               width: drawerWidth,
             },

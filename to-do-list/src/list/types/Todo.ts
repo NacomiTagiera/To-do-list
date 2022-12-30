@@ -1,8 +1,8 @@
 export interface Todo {
   id: number;
   category: string;
-  value: string;
+  task: string;
   priority: string;
   createdAt: string;
-  isDone: boolean;
+  completed: boolean;
 }

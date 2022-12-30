@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useMutation, useQuery } from "react-query";
+
 import {
   Alert,
   Box,
@@ -20,8 +22,10 @@ import * as Yup from "yup";
 
 import FormikField from "../components/FormikField";
 import { Todo } from "../list/types/Todo";
-import { TodoFormikValues } from "../form/types/TodoFormikValues";
-import { useDispatchTodos, useGetTodos } from "../list/todosSlice";
+import { TodoFormikValues } from "../list/types/TodoFormikValues";
+
+import queryClient from "../config/queryClient";
+import { createTodo, fetchListOfTodos } from "../config/backendAPI";
 
 interface Props {
   isInEditTodo?: boolean;
@@ -36,59 +40,46 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
   );
   const [displayInfo, setDisplayInfo] = useState<boolean>(false);
 
+  const { data: todos } = useQuery("todos", fetchListOfTodos);
+
+  const addTask = useMutation(createTodo, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("todos");
+    },
+  });
+
   const handlePriorityChange = (event: SelectChangeEvent) => {
     setPriority(event.target.value as string);
   };
 
   const initialValues: TodoFormikValues = {
     category: todo?.category || "",
-    value: todo?.value || "",
+    task: todo?.task || "",
+    priority: todo?.priority || priority,
   };
-
-  const todos: Todo[] = useGetTodos();
-  const { addTodo, editTodo } = useDispatchTodos();
 
   const getFreeId = (todos: Todo[]): number => {
-    return !!todos ? Math.max(...todos.map((todo) => todo.id)) + 1 : 0;
-  };
-
-  const createTodo = (
-    category: string,
-    priority: string,
-    value: string,
-    prevTodos: Todo[]
-  ): Todo => {
-    const newId: number = getFreeId(prevTodos);
-    const creationDate: string = new Date().toISOString();
-    return {
-      id: newId,
-      category: category,
-      priority: priority,
-      value: value,
-      createdAt: creationDate,
-      isDone: false,
-    };
+    return Math.max(...todos.map((todo) => todo.id)) + 1;
   };
 
   const onSubmit = (
     values: TodoFormikValues,
     actions: FormikHelpers<TodoFormikValues>
   ) => {
-    if (!!todo) {
-      editTodo({
-        ...todo,
-        category: values.category,
-        value: values.value,
-        priority: priority,
-      });
-    } else {
-      addTodo(createTodo(values.category, priority, values.value, todos));
-      actions.resetForm();
-    }
+    addTask.mutate({
+      id: getFreeId(todos ? todos : []),
+      category: values.category,
+      task: values.task,
+      priority,
+      createdAt: new Date().toISOString(),
+      completed: false,
+    });
+    console.log(values);
+    actions.resetForm();
     setDisplayInfo(true);
   };
 
-  const validationSchema = Yup.object({
+  const validationSchema = Yup.object().shape({
     category: Yup.string()
       .label("Category")
       .required()
@@ -96,22 +87,18 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
       .strict(true)
       .min(3)
       .max(25),
-    value: Yup.string()
+    task: Yup.string()
       .label("Task")
       .required()
       .trim("Incorrect format")
       .strict(true)
       .min(3)
-      .max(60)
-      .notOneOf(
-        todos.map((todo) => todo.value),
-        "This task already exists"
-      ),
+      .max(60),
   });
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ mx: "auto", width: { xs: "100vw", md: "max-content" } }}>
+      <Box sx={{ mx: "auto", width: { md: "max-content" } }}>
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
@@ -146,11 +133,7 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
                   placeholder="e.g. School, Health, Home"
                 />
 
-                <FormikField
-                  fieldName="value"
-                  label="Task"
-                  placeholder="Task"
-                />
+                <FormikField fieldName="task" label="Task" placeholder="Task" />
                 <FormControl>
                   <InputLabel>Priority</InputLabel>
                   <Select

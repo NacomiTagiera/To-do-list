@@ -1,4 +1,5 @@
 export interface TodoFormikValues {
   category: string;
-  value: string;
+  task: string;
+  priority: string;
 }

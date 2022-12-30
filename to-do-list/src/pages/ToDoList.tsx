@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery, useMutation } from "react-query";
 
 import {
   DataGrid,
@@ -9,13 +10,17 @@ import {
   useGridSelector,
   GridToolbarQuickFilter,
   GridLinkOperator,
+  GridEventListener,
 } from "@mui/x-data-grid";
-import { Box, Pagination, Typography } from "@mui/material";
-import { Done, Edit, HighlightOff } from "@mui/icons-material";
+import { Alert, Box, Pagination, Typography } from "@mui/material";
+import { Edit, HighlightOff } from "@mui/icons-material";
 
-import { useDispatchTodos, useGetTodos } from "../list/todosSlice";
+import queryClient from "../config/queryClient";
+import { fetchListOfTodos, deleteTodo } from "../config/backendAPI";
 import { Todo } from "../list/types/Todo";
+
 import EditTodo from "./EditTodo";
+import Loading from "./Loading";
 
 function QuickSearchToolbar() {
   return (
@@ -46,7 +51,7 @@ function CustomPagination() {
 
   return (
     <Pagination
-      color="primary"
+      color="standard"
       count={pageCount}
       page={page + 1}
       onChange={(event, value) => apiRef.current.setPage(value - 1)}
@@ -55,34 +60,32 @@ function CustomPagination() {
 }
 
 export default function ToDoList() {
-  const todos: Todo[] = useGetTodos();
-  const { deleteTodo, toggleIsDone } = useDispatchTodos();
+  const {
+    isError,
+    isLoading,
+    data: todos,
+  } = useQuery("todos", fetchListOfTodos);
 
   const [todoToEdit, setTodoToEdit] = useState<Todo | undefined>(undefined);
 
   const styledDataGrid = {
     "& .MuiDataGrid-virtualScrollerRenderZone": {
       "& .MuiDataGrid-row": {
-        "&:nth-of-type(2n)": { backgroundColor: "rgba(235, 235, 235, .7)" },
+        "&:nth-of-type(2n)": { backgroundColor: "#ff8a65" },
+        "&:nth-of-type(2n-1)": { backgroundColor: "#ff7043" },
       },
     },
     "& .MuiDataGrid-columnHeaders": {
-      backgroundColor: "rgba(235, 235, 235, .7)",
-      color: "primary.light",
+      backgroundColor: "#ff8a65",
       fontSize: 16,
     },
-    "& .MuiDataGrid-cell:hover": {
-      color: "primary.main",
-    },
-    boxShadow: 23,
-    border: 2,
-    borderColor: "primary.light",
-    width: "max(1000px, 100%)",
+    border: "none",
+    color: "white",
     mx: "auto",
   };
 
   const iconStyles = {
-    transition: ".3s",
+    transition: "0.3s",
     "&:hover": {
       opacity: "0.7",
       cursor: "pointer",
@@ -95,83 +98,76 @@ export default function ToDoList() {
       field: "category",
       headerName: "Category",
       type: "string",
-      flex: 1,
       align: "center",
       headerAlign: "center",
+      flex: 1,
+      minWidth: 100,
     },
     {
-      field: "value",
+      field: "task",
       headerName: "Task",
       type: "string",
-      flex: 2.5,
       align: "center",
       headerAlign: "center",
+      flex: 2,
+      minWidth: 100,
     },
     {
       field: "priority",
       headerName: "Priority",
       type: "string",
-      flex: 1,
       align: "center",
       headerAlign: "center",
+      flex: 1,
+      minWidth: 100,
     },
     {
       field: "createdAt",
       headerName: "Creation date",
       type: "dateTime",
       valueGetter: ({ value }) => value && new Date(value),
-      flex: 1.5,
       align: "center",
       headerAlign: "center",
+      flex: 1,
+      minWidth: 150,
     },
     {
-      field: "isDone",
-      headerName: "Status",
-      type: "string",
-      valueFormatter({ value }) {
-        return value ? "Done" : "In progress";
-      },
-      flex: 1,
+      field: "completed",
+      headerName: "Completed",
+      type: "boolean",
       align: "center",
       headerAlign: "center",
+      flex: 0.5,
+      minWidth: 100,
     },
     {
       field: "actions",
       headerName: "Actions",
-      flex: 0.5,
       sortable: false,
       align: "center",
       headerAlign: "center",
-      renderCell(cellValues) {
+      flex: 1,
+      minWidth: 100,
+      renderCell() {
         return (
           <>
-            <Done
-              color="success"
-              sx={iconStyles}
-              onClick={() => toggleIsDone(cellValues.row.id)}
-            />
-            <Edit
-              color="primary"
-              sx={iconStyles}
-              onClick={() => {
-                for (const todo of todos) {
-                  if (cellValues.row.id === todo.id) {
-                    setTodoToEdit(todo);
-                    break;
-                  }
-                }
-              }}
-            />
-            <HighlightOff
-              color="error"
-              sx={iconStyles}
-              onClick={() => deleteTodo(cellValues.row.id)}
-            />
+            <Edit color="primary" sx={iconStyles} onClick={() => 0} />
+            <HighlightOff color="error" sx={iconStyles} onClick={() => 0} />
           </>
         );
       },
     },
   ];
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isError) {
+    return (
+      <Alert severity="error">Sorry, an rror occured. Try again later</Alert>
+    );
+  }
 
   return (
     <>
@@ -192,10 +188,13 @@ export default function ToDoList() {
           Toolbar: QuickSearchToolbar,
         }}
         pagination
-        rows={todos}
+        rows={todos ? todos : []}
         columns={columns}
+        density="comfortable"
         pageSize={10}
         autoHeight
+        columnBuffer={2}
+        columnThreshold={2}
         disableColumnMenu
         disableSelectionOnClick
         sx={styledDataGrid}
