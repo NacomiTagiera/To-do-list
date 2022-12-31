@@ -10,7 +10,6 @@ import {
   useGridSelector,
   GridToolbarQuickFilter,
   GridLinkOperator,
-  GridEventListener,
 } from "@mui/x-data-grid";
 import { Alert, Box, Pagination, Typography } from "@mui/material";
 import { Edit, HighlightOff } from "@mui/icons-material";
@@ -51,7 +50,7 @@ function CustomPagination() {
 
   return (
     <Pagination
-      color="standard"
+      color="primary"
       count={pageCount}
       page={page + 1}
       onChange={(event, value) => apiRef.current.setPage(value - 1)}
@@ -71,16 +70,16 @@ export default function ToDoList() {
   const styledDataGrid = {
     "& .MuiDataGrid-virtualScrollerRenderZone": {
       "& .MuiDataGrid-row": {
-        "&:nth-of-type(2n)": { backgroundColor: "#ff8a65" },
-        "&:nth-of-type(2n-1)": { backgroundColor: "#ff7043" },
+        "&:nth-of-type(2n)": { backgroundColor: "lightgray" },
+        "&:nth-of-type(2n-1)": { backgroundColor: "#eee" },
       },
     },
     "& .MuiDataGrid-columnHeaders": {
-      backgroundColor: "#ff8a65",
+      backgroundColor: "lightgray",
+      color: "primary.dark",
       fontSize: 16,
     },
     border: "none",
-    color: "white",
     mx: "auto",
   };
 
@@ -119,7 +118,7 @@ export default function ToDoList() {
       align: "center",
       headerAlign: "center",
       flex: 1,
-      minWidth: 100,
+      minWidth: 130,
     },
     {
       field: "createdAt",
@@ -129,7 +128,7 @@ export default function ToDoList() {
       align: "center",
       headerAlign: "center",
       flex: 1,
-      minWidth: 150,
+      minWidth: 160,
     },
     {
       field: "completed",

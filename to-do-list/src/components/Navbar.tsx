@@ -67,7 +67,7 @@ export default function Navbar({ window }: Props) {
   return (
     <Box sx={{ display: "flex", mb: 15 }}>
       <AppBar component="nav">
-        <Toolbar sx={{ backgroundColor: "#8a2b06" }}>
+        <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -112,7 +112,6 @@ export default function Navbar({ window }: Props) {
           sx={{
             display: { xs: "block", sm: "none" },
             "& .MuiDrawer-paper": {
-              backgroundColor: "darkgray",
               boxSizing: "border-box",
               width: drawerWidth,
             },

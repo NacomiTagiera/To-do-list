@@ -9,8 +9,9 @@ html {
 }
 
 body {
-  background-color: #5c5959;
-  color: white;
+  background: #b1caf8;
+  background: radial-gradient(circle, #3a7ffb 0%, #adc7f8 90%);
+  color: #fff;
   margin: 0;
   padding: 0;
 }
@@ -20,12 +21,12 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: lightgray;
+  background: #add8e6;
   border-radius: 8px;
-  box-shadow: inset 0 0 5px darkgray;
+  box-shadow: inset 0 0 5px #02029c;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #868585;
+  background: #00008b;
   border-radius: 8px;
 }

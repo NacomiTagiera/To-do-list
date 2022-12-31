@@ -5,6 +5,7 @@ import {
   Alert,
   Box,
   Button,
+  Card,
   Collapse,
   createTheme,
   FormControl,
@@ -74,23 +75,26 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
       createdAt: new Date().toISOString(),
       completed: false,
     });
-    console.log(values);
     actions.resetForm();
     setDisplayInfo(true);
+    setTimeout(() => {
+      setDisplayInfo(false);
+    }, 2000);
+    setPriority("Normal");
   };
 
   const validationSchema = Yup.object().shape({
     category: Yup.string()
       .label("Category")
       .required()
-      .trim("Incorrect format")
+      .trim("Delete leading and trailing spaces!")
       .strict(true)
       .min(3)
       .max(25),
     task: Yup.string()
       .label("Task")
       .required()
-      .trim("Incorrect format")
+      .trim("Delete leading and trailing spaces!")
       .strict(true)
       .min(3)
       .max(60),
@@ -98,25 +102,27 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ mx: "auto", width: { md: "max-content" } }}>
+      <Card
+        sx={{
+          backgroundColor: "",
+          border: "2px solid lightgray",
+          borderRadius: 5,
+          boxShadow: 23,
+          mx: "auto",
+          p: 5,
+          width: "min(90%, 500px)",
+        }}
+      >
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
           validationSchema={validationSchema}
         >
-          <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <Stack direction="column" spacing={4}>
             <Typography
-              variant="h1"
-              component="h1"
-              sx={{ mb: 5, textAlign: "center" }}
+              variant="h3"
+              component="h3"
+              sx={{ textAlign: "center" }}
             >
               {!!todo ? "Edit task" : "Add new task"}
             </Typography>
@@ -153,7 +159,7 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
                 </Button>
               </Stack>
             </Form>
-          </Box>
+          </Stack>
         </Formik>
         <Collapse in={displayInfo} mountOnEnter unmountOnExit>
           <Alert severity="success" onClose={() => setDisplayInfo(false)}>
@@ -162,7 +168,7 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
               : "Todo was successfully added!"}
           </Alert>
         </Collapse>
-      </Box>
+      </Card>
     </ThemeProvider>
   );
 }

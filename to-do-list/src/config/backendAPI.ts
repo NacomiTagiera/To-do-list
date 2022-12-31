@@ -25,9 +25,9 @@ const createTodo = async (newTodo: Todo) => {
   backendAPI.post(connection.todos.url, newTodo);
 };
 
-const deleteTodo = async (todoId: string) => {
+const deleteTodo = async (firebaseId: string) => {
   const response = await backendAPI.delete(
-    `${connection.todos.url}/${todoId}`,
+    `${connection.todos.url}/${firebaseId}`,
     {
       headers,
     }
@@ -35,15 +35,18 @@ const deleteTodo = async (todoId: string) => {
   return response.data;
 };
 
-const editTodo = async (modifiedTodo: TodoFormikValues, todoId: string) => {
-  const response = await backendAPI.patch(`${connection.todos.url}/${todoId}`, {
-    headers,
-    data: {
-      category: modifiedTodo.category,
-      task: modifiedTodo.task,
-      priority: modifiedTodo.priority,
-    },
-  });
+const editTodo = async (modifiedTodo: TodoFormikValues, firebaseId: string) => {
+  const response = await backendAPI.patch(
+    `${connection.todos.url}/${firebaseId}`,
+    {
+      headers,
+      data: {
+        category: modifiedTodo.category,
+        task: modifiedTodo.task,
+        priority: modifiedTodo.priority,
+      },
+    }
+  );
   return response;
 };
 
