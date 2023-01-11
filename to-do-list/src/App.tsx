@@ -12,7 +12,7 @@ import RootLayout from "./layouts/RootLayout";
 //pages
 const AddTaskPanel = lazy(() => import("./pages/AddTaskPanel"));
 const Loading = lazy(() => import("./pages/Loading"));
-const PageNotFound = lazy(() => import("./pages/PageNotFound"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 const ToDoList = lazy(() => import("./pages/ToDoList"));
 
 const router = createBrowserRouter(
@@ -21,7 +21,7 @@ const router = createBrowserRouter(
       <Route index element={<ToDoList />} />
       <Route path="add-task" element={<AddTaskPanel />} />
       <Route path="todo-list" element={<ToDoList />} />
-      <Route path="*" element={<PageNotFound />} />
+      <Route path="*" element={<NotFound />} />
     </Route>
   )
 );

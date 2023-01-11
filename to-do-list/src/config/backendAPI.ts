@@ -17,27 +17,40 @@ const headers = {
 };
 
 const fetchListOfTodos = async (): Promise<Todo[]> => {
-  const response = await backendAPI.get(connection.todos.url, { headers });
+  const response = await backendAPI.get(`${connection.todos.url}.json`, {
+    headers,
+  });
   return Object.values(response.data);
 };
 
 const createTodo = async (newTodo: Todo) => {
-  backendAPI.post(connection.todos.url, newTodo);
+  backendAPI.post(`${connection.todos.url}.json`, newTodo);
 };
 
-const deleteTodo = async (firebaseId: string) => {
-  const response = await backendAPI.delete(
-    `${connection.todos.url}/${firebaseId}`,
-    {
-      headers,
+const deleteTodo = async (todoId: number) => {
+  const fetchedData = await backendAPI.get(`${connection.todos.url}.json`, {
+    headers,
+  });
+  for (const [key, val] of Object.entries(fetchedData.data)) {
+    if (val) {
+      const value = val as Todo;
+      if (todoId === value.id) {
+        const response = await backendAPI.delete(
+          `${connection.todos.url}/${key}.json`,
+          {
+            headers,
+          }
+        );
+        return response.data;
+      }
     }
-  );
-  return response.data;
+  }
+  return 0;
 };
 
 const editTodo = async (modifiedTodo: TodoFormikValues, firebaseId: string) => {
   const response = await backendAPI.patch(
-    `${connection.todos.url}/${firebaseId}`,
+    `${connection.todos.url}/${firebaseId}.json`,
     {
       headers,
       data: {

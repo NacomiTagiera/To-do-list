@@ -1,7 +1,7 @@
 import { Card, Dialog } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-import AddTaskPanel from "./AddTaskPanel";
+import AddTaskPanel from "../pages/AddTaskPanel";
 import { Todo } from "../list/types/Todo";
 
 interface Props {

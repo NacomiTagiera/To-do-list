@@ -15,10 +15,11 @@ import { Alert, Box, Pagination, Typography } from "@mui/material";
 import { Edit, HighlightOff } from "@mui/icons-material";
 
 import queryClient from "../config/queryClient";
-import { fetchListOfTodos, deleteTodo } from "../config/backendAPI";
+import { fetchListOfTodos } from "../config/backendAPI";
 import { Todo } from "../list/types/Todo";
 
-import EditTodo from "./EditTodo";
+import DeleteTodo from "../components/DeleteTodo";
+import EditTodo from "../components/EditTodo";
 import Loading from "./Loading";
 
 function QuickSearchToolbar() {
@@ -65,6 +66,9 @@ export default function ToDoList() {
     data: todos,
   } = useQuery("todos", fetchListOfTodos);
 
+  const [todoToDelete, setTodoToDelete] = useState<number | undefined>(
+    undefined
+  );
   const [todoToEdit, setTodoToEdit] = useState<Todo | undefined>(undefined);
 
   const styledDataGrid = {
@@ -147,11 +151,28 @@ export default function ToDoList() {
       headerAlign: "center",
       flex: 1,
       minWidth: 100,
-      renderCell() {
+      renderCell(cellValues) {
         return (
           <>
-            <Edit color="primary" sx={iconStyles} onClick={() => 0} />
-            <HighlightOff color="error" sx={iconStyles} onClick={() => 0} />
+            <Edit
+              color="primary"
+              sx={iconStyles}
+              onClick={() => {
+                for (const todo of todos!) {
+                  if (todo.id === cellValues.row.id) {
+                    setTodoToEdit(todo);
+                    break;
+                  }
+                }
+              }}
+            />
+            <HighlightOff
+              color="error"
+              sx={iconStyles}
+              onClick={() => {
+                setTodoToDelete(cellValues.row.id);
+              }}
+            />
           </>
         );
       },
@@ -164,7 +185,7 @@ export default function ToDoList() {
 
   if (isError) {
     return (
-      <Alert severity="error">Sorry, an rror occured. Try again later</Alert>
+      <Alert severity="error">Sorry, an error occured. Try again later</Alert>
     );
   }
 
@@ -197,6 +218,10 @@ export default function ToDoList() {
         disableColumnMenu
         disableSelectionOnClick
         sx={styledDataGrid}
+      />
+      <DeleteTodo
+        todoToDelete={todoToDelete}
+        onClose={() => setTodoToDelete(undefined)}
       />
       <EditTodo todo={todoToEdit} onClose={() => setTodoToEdit(undefined)} />
     </>

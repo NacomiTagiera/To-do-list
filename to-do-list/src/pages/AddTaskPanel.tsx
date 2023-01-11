@@ -3,11 +3,11 @@ import { useMutation, useQuery } from "react-query";
 
 import {
   Alert,
-  Box,
   Button,
   Card,
   Collapse,
   createTheme,
+  Dialog,
   FormControl,
   InputLabel,
   MenuItem,
@@ -39,7 +39,8 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
   const [priority, setPriority] = useState<string>(
     !!todo ? todo.priority : "Normal"
   );
-  const [displayInfo, setDisplayInfo] = useState<boolean>(false);
+  const [displaySuccessInfo, setDisplaySuccessInfo] = useState<boolean>(false);
+  const [displayErrorInfo, setDisplayErrorInfo] = useState<boolean>(false);
 
   const { data: todos } = useQuery("todos", fetchListOfTodos);
 
@@ -76,11 +77,12 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
       completed: false,
     });
     actions.resetForm();
-    setDisplayInfo(true);
-    setTimeout(() => {
-      setDisplayInfo(false);
-    }, 2000);
+    setDisplaySuccessInfo(true);
     setPriority("Normal");
+    setTimeout(() => {
+      setDisplaySuccessInfo(false);
+      window.location.reload();
+    }, 2000);
   };
 
   const validationSchema = Yup.object().shape({
@@ -161,11 +163,12 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
             </Form>
           </Stack>
         </Formik>
-        <Collapse in={displayInfo} mountOnEnter unmountOnExit>
-          <Alert severity="success" onClose={() => setDisplayInfo(false)}>
-            {isInEditTodo
-              ? "Todo was successfully edited!"
-              : "Todo was successfully added!"}
+        <Dialog open={displaySuccessInfo}>
+          <Alert>Task has been successfully added!</Alert>
+        </Dialog>
+        <Collapse in={displayErrorInfo} mountOnEnter unmountOnExit>
+          <Alert severity="error" onClose={() => setDisplayErrorInfo(false)}>
+            An error occurred! Correct the input fields and try again.
           </Alert>
         </Collapse>
       </Card>

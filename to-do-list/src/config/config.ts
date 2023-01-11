@@ -13,7 +13,7 @@ interface Connection {
 
 const BASE_URL =
   "https://todo-list-881e2-default-rtdb.europe-west1.firebasedatabase.app/";
-const URL_GET_TODOS = "todos.json";
+const URL_GET_TODOS = "todos";
 
 export const connection: Connection = {
   baseURL: {
