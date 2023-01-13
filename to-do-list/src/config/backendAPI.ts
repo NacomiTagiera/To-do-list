@@ -1,8 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 import { connection } from "./config";
-import { Todo } from "../list/types/Todo";
-import { TodoFormikValues } from "../list/types/TodoFormikValues";
+import { ModifiedTodo, Todo, TodoFormikValues } from "../types/main";
 
 const settings: AxiosRequestConfig = {
   baseURL: connection.baseURL.url,
@@ -16,11 +15,16 @@ const headers = {
   accept: "application/json",
 };
 
-const fetchListOfTodos = async (): Promise<Todo[]> => {
-  const response = await backendAPI.get(`${connection.todos.url}.json`, {
+const fetchData = async () => {
+  const fetchedData = await backendAPI.get(`${connection.todos.url}.json`, {
     headers,
   });
-  return Object.values(response.data);
+  return fetchedData.data;
+};
+
+const fetchListOfTodos = async (): Promise<Todo[]> => {
+  const response = await fetchData();
+  return Object.values(response);
 };
 
 const createTodo = async (newTodo: Todo) => {
@@ -28,10 +32,8 @@ const createTodo = async (newTodo: Todo) => {
 };
 
 const deleteTodo = async (todoId: number) => {
-  const fetchedData = await backendAPI.get(`${connection.todos.url}.json`, {
-    headers,
-  });
-  for (const [key, val] of Object.entries(fetchedData.data)) {
+  const fetchedData = await fetchData();
+  for (const [key, val] of Object.entries(fetchedData)) {
     if (val) {
       const value = val as Todo;
       if (todoId === value.id) {
@@ -48,19 +50,28 @@ const deleteTodo = async (todoId: number) => {
   return 0;
 };
 
-const editTodo = async (modifiedTodo: TodoFormikValues, firebaseId: string) => {
-  const response = await backendAPI.patch(
-    `${connection.todos.url}/${firebaseId}.json`,
-    {
-      headers,
-      data: {
-        category: modifiedTodo.category,
-        task: modifiedTodo.task,
-        priority: modifiedTodo.priority,
-      },
+const editTodo = async (modifiedTodo: ModifiedTodo) => {
+  const fetchedData = await fetchData();
+  for (const [key, val] of Object.entries(fetchedData)) {
+    if (val) {
+      const value = val as Todo;
+      if (modifiedTodo.id === value.id) {
+        console.log(modifiedTodo.task);
+        const response = await backendAPI({
+          method: "patch",
+          url: `${connection.todos.url}/${key}.json`,
+          headers,
+          data: {
+            category: modifiedTodo.category,
+            priority: modifiedTodo.priority,
+            task: modifiedTodo.task,
+          },
+        });
+        return response;
+      }
     }
-  );
-  return response;
+  }
+  return 0;
 };
 
 export { createTodo, deleteTodo, editTodo, fetchListOfTodos, backendAPI };

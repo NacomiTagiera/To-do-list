@@ -14,9 +14,8 @@ import {
 import { Alert, Box, Pagination, Typography } from "@mui/material";
 import { Edit, HighlightOff } from "@mui/icons-material";
 
-import queryClient from "../config/queryClient";
 import { fetchListOfTodos } from "../config/backendAPI";
-import { Todo } from "../list/types/Todo";
+import { Todo } from "../types/main";
 
 import DeleteTodo from "../components/DeleteTodo";
 import EditTodo from "../components/EditTodo";
@@ -158,12 +157,9 @@ export default function ToDoList() {
               color="primary"
               sx={iconStyles}
               onClick={() => {
-                for (const todo of todos!) {
-                  if (todo.id === cellValues.row.id) {
-                    setTodoToEdit(todo);
-                    break;
-                  }
-                }
+                setTodoToEdit(
+                  todos?.find((todo) => todo.id === cellValues.row.id)
+                );
               }}
             />
             <HighlightOff

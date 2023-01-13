@@ -18,15 +18,15 @@ import {
   Typography,
 } from "@mui/material";
 
+import { AxiosError } from "axios";
 import { Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 
 import FormikField from "../components/FormikField";
-import { Todo } from "../list/types/Todo";
-import { TodoFormikValues } from "../list/types/TodoFormikValues";
+import { ModifiedTodo, Todo, TodoFormikValues } from "../types/main";
 
 import queryClient from "../config/queryClient";
-import { createTodo, fetchListOfTodos } from "../config/backendAPI";
+import { createTodo, editTodo, fetchListOfTodos } from "../config/backendAPI";
 
 interface Props {
   isInEditTodo?: boolean;
@@ -37,18 +37,48 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
   const theme = createTheme();
 
   const [priority, setPriority] = useState<string>(
-    !!todo ? todo.priority : "Normal"
+    todo ? todo.priority : "Normal"
   );
   const [displaySuccessInfo, setDisplaySuccessInfo] = useState<boolean>(false);
   const [displayErrorInfo, setDisplayErrorInfo] = useState<boolean>(false);
 
   const { data: todos } = useQuery("todos", fetchListOfTodos);
 
-  const addTask = useMutation(createTodo, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("todos");
+  const { mutate: createTodoMutation } = useMutation(
+    (newTodo: Todo) => {
+      return createTodo(newTodo);
     },
-  });
+    {
+      onSuccess: (response: any) => {
+        if (response instanceof AxiosError) {
+          setDisplayErrorInfo(true);
+        } else {
+          queryClient.invalidateQueries(["todos"]);
+        }
+      },
+      onError: () => {
+        setDisplayErrorInfo(true);
+      },
+    }
+  );
+
+  const { mutate: editTodoMutation } = useMutation(
+    (modifiedTodo: ModifiedTodo) => {
+      return editTodo(modifiedTodo);
+    },
+    {
+      onSuccess: (response: any) => {
+        if (response instanceof AxiosError) {
+          setDisplayErrorInfo(true);
+        } else {
+          queryClient.invalidateQueries(["todos"]);
+        }
+      },
+      onError: () => {
+        setDisplayErrorInfo(true);
+      },
+    }
+  );
 
   const handlePriorityChange = (event: SelectChangeEvent) => {
     setPriority(event.target.value as string);
@@ -61,24 +91,32 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
   };
 
   const getFreeId = (todos: Todo[]): number => {
-    return Math.max(...todos.map((todo) => todo.id)) + 1;
+    return todos.length ? Math.max(...todos.map((todo) => todo.id)) + 1 : 0;
   };
 
   const onSubmit = (
     values: TodoFormikValues,
     actions: FormikHelpers<TodoFormikValues>
   ) => {
-    addTask.mutate({
-      id: getFreeId(todos ? todos : []),
-      category: values.category,
-      task: values.task,
-      priority,
-      createdAt: new Date().toISOString(),
-      completed: false,
-    });
+    if (!todo) {
+      createTodoMutation({
+        id: getFreeId(todos ? todos : []),
+        category: values.category,
+        task: values.task,
+        priority,
+        createdAt: new Date().toISOString(),
+        completed: false,
+      });
+    } else {
+      editTodoMutation({
+        id: todo.id,
+        category: values.category,
+        task: values.task,
+        priority,
+      });
+    }
     actions.resetForm();
     setDisplaySuccessInfo(true);
-    setPriority("Normal");
     setTimeout(() => {
       setDisplaySuccessInfo(false);
       window.location.reload();
@@ -106,13 +144,12 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
     <ThemeProvider theme={theme}>
       <Card
         sx={{
-          backgroundColor: "",
           border: "2px solid lightgray",
-          borderRadius: 5,
-          boxShadow: 23,
-          mx: "auto",
+          borderRadius: todo ? 0 : 5,
+          boxShadow: todo ? 0 : 23,
+          mx: todo ? 0 : "auto",
           p: 5,
-          width: "min(90%, 500px)",
+          width: todo ? "100%" : "min(90%, 500px)",
         }}
       >
         <Formik
@@ -126,7 +163,7 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
               component="h3"
               sx={{ textAlign: "center" }}
             >
-              {!!todo ? "Edit task" : "Add new task"}
+              {todo ? "Edit task" : "Add new task"}
             </Typography>
             <Form noValidate>
               <Stack
@@ -164,7 +201,7 @@ export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
           </Stack>
         </Formik>
         <Dialog open={displaySuccessInfo}>
-          <Alert>Task has been successfully added!</Alert>
+          <Alert>Task has been successfully {todo ? "saved" : "added"}!</Alert>
         </Dialog>
         <Collapse in={displayErrorInfo} mountOnEnter unmountOnExit>
           <Alert severity="error" onClose={() => setDisplayErrorInfo(false)}>
