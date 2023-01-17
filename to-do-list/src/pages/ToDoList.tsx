@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery, useMutation } from "react-query";
+import { useQuery } from "react-query";
 
 import {
   DataGrid,
@@ -12,7 +12,7 @@ import {
   GridLinkOperator,
 } from "@mui/x-data-grid";
 import { Alert, Box, Pagination, Typography } from "@mui/material";
-import { Edit, HighlightOff } from "@mui/icons-material";
+import { Edit, HighlightOff, Visibility } from "@mui/icons-material";
 
 import { fetchListOfTodos } from "../config/backendAPI";
 import { Todo } from "../types/main";
@@ -20,6 +20,8 @@ import { Todo } from "../types/main";
 import DeleteTodo from "../components/DeleteTodo";
 import EditTodo from "../components/EditTodo";
 import Loading from "./Loading";
+import StyledTooltip from "../components/StyledTooltip";
+import TodoDetails from "../components/TodoDetails";
 
 function QuickSearchToolbar() {
   return (
@@ -68,6 +70,7 @@ export default function ToDoList() {
   const [todoToDelete, setTodoToDelete] = useState<number | undefined>(
     undefined
   );
+  const [todoDetails, setTodoDetails] = useState<Todo | undefined>(undefined);
   const [todoToEdit, setTodoToEdit] = useState<Todo | undefined>(undefined);
 
   const styledDataGrid = {
@@ -153,22 +156,37 @@ export default function ToDoList() {
       renderCell(cellValues) {
         return (
           <>
-            <Edit
-              color="primary"
-              sx={iconStyles}
-              onClick={() => {
-                setTodoToEdit(
-                  todos?.find((todo) => todo.id === cellValues.row.id)
-                );
-              }}
-            />
-            <HighlightOff
-              color="error"
-              sx={iconStyles}
-              onClick={() => {
-                setTodoToDelete(cellValues.row.id);
-              }}
-            />
+            <StyledTooltip title="Edit">
+              <Edit
+                color="primary"
+                sx={iconStyles}
+                onClick={() => {
+                  setTodoToEdit(
+                    todos?.find((todo) => todo.id === cellValues.row.id)
+                  );
+                }}
+              />
+            </StyledTooltip>
+            <StyledTooltip title="Details">
+              <Visibility
+                color="info"
+                sx={iconStyles}
+                onClick={() => {
+                  setTodoDetails(
+                    todos?.find((todo) => todo.id === cellValues.row.id)
+                  );
+                }}
+              />
+            </StyledTooltip>
+            <StyledTooltip title="Delete">
+              <HighlightOff
+                color="error"
+                sx={iconStyles}
+                onClick={() => {
+                  setTodoToDelete(cellValues.row.id);
+                }}
+              />
+            </StyledTooltip>
           </>
         );
       },
@@ -220,6 +238,10 @@ export default function ToDoList() {
         onClose={() => setTodoToDelete(undefined)}
       />
       <EditTodo todo={todoToEdit} onClose={() => setTodoToEdit(undefined)} />
+      <TodoDetails
+        todo={todoDetails}
+        onClose={() => setTodoDetails(undefined)}
+      />
     </>
   );
 }

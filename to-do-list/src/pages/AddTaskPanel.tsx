@@ -23,17 +23,20 @@ import { Form, Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 
 import FormikField from "../components/FormikField";
-import { ModifiedTodo, Todo, TodoFormikValues } from "../types/main";
+import {
+  AddTaskPanelProps,
+  ModifiedTodo,
+  Todo,
+  TodoFormikValues,
+} from "../types/main";
 
 import queryClient from "../config/queryClient";
 import { createTodo, editTodo, fetchListOfTodos } from "../config/backendAPI";
 
-interface Props {
-  isInEditTodo?: boolean;
-  todo?: Todo;
-}
-
-export default function AddTaskPanel({ isInEditTodo = false, todo }: Props) {
+export default function AddTaskPanel({
+  isInEditTodo = false,
+  todo,
+}: AddTaskPanelProps) {
   const theme = createTheme();
 
   const [priority, setPriority] = useState<string>(

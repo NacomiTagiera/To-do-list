@@ -4,13 +4,9 @@ import CancelIcon from "@mui/icons-material/Cancel";
 
 import { deleteTodo } from "../config/backendAPI";
 import queryClient from "../config/queryClient";
+import { DeleteTodoProps } from "../types/main";
 
-interface Props {
-  todoToDelete: number | undefined;
-  onClose: () => void;
-}
-
-export default function DeleteTodo({ todoToDelete, onClose }: Props) {
+export default function DeleteTodo({ todoToDelete, onClose }: DeleteTodoProps) {
   const deleteTodoMutation = useMutation(
     (todoId: number) => {
       return deleteTodo(todoId);

@@ -2,14 +2,9 @@ import { Dialog } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 
 import AddTaskPanel from "../pages/AddTaskPanel";
-import { Todo } from "../types/main";
+import { DialogProps } from "../types/main";
 
-interface Props {
-  todo: Todo | undefined;
-  onClose: () => void;
-}
-
-export default function EditTodo({ todo, onClose }: Props) {
+export default function EditTodo({ todo, onClose }: DialogProps) {
   return (
     <Dialog open={!!todo} onClose={onClose}>
       <AddTaskPanel isInEditTodo={true} todo={todo} />

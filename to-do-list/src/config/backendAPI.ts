@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 import { connection } from "./config";
-import { ModifiedTodo, Todo, TodoFormikValues } from "../types/main";
+import { ModifiedTodo, Todo } from "../types/main";
 
 const settings: AxiosRequestConfig = {
   baseURL: connection.baseURL.url,

@@ -1,13 +1,7 @@
 import { useField } from "formik";
 import { TextField } from "@mui/material";
 
-type Props = {
-  fieldName: string;
-  label: string;
-  placeholder: string;
-  required?: boolean;
-  fieldType?: string;
-};
+import { FormikFieldProps } from "../types/main";
 
 export default function FormikField({
   fieldName,
@@ -15,7 +9,7 @@ export default function FormikField({
   placeholder,
   required = true,
   fieldType = "text",
-}: Props) {
+}: FormikFieldProps) {
   const [field, meta] = useField(fieldName);
 
   return (

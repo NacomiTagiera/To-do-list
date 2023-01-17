@@ -17,13 +17,11 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-interface Props {
-  window?: () => Window;
-}
+import { NavbarProps } from "../types/main";
 
 const drawerWidth = 240;
 
-export default function Navbar({ window }: Props) {
+export default function Navbar({ window }: NavbarProps) {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
