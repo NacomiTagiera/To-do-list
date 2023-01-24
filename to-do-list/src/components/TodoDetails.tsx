@@ -28,13 +28,12 @@ export default function TodoDetails({ todo, onClose }: DialogProps) {
         </Typography>
         {todo ? (
           <>
-            <Typography variant="body1">Category: {todo.category}</Typography>
-            <Typography variant="body1">Task: {todo.task}</Typography>
-            <Typography variant="body1">Priority: {todo.priority}</Typography>
-            <Typography variant="body1">
-              Creation date: {new Date(todo.createdAt).toLocaleDateString()}
-            </Typography>
-            <Typography variant="body1">Completed: {todo.completed}</Typography>
+            {Object.entries(todo).map(([key, value]) => (
+              <Typography variant="body1" key={key}>
+                {`${key.charAt(0).toUpperCase() + key.slice(1)}`}:{" "}
+                {value ? value : "false"}
+              </Typography>
+            ))}
           </>
         ) : (
           <Typography variant="h4" component="h4" color="error">

@@ -8,7 +8,7 @@ import { DeleteTodoProps } from "../types/main";
 
 export default function DeleteTodo({ todoToDelete, onClose }: DeleteTodoProps) {
   const deleteTodoMutation = useMutation(
-    (todoId: number) => {
+    (todoId: string) => {
       return deleteTodo(todoId);
     },
     {
@@ -51,7 +51,7 @@ export default function DeleteTodo({ todoToDelete, onClose }: DeleteTodoProps) {
         </Typography>
         <Button
           variant="contained"
-          sx={{ my: 3 }}
+          sx={{ mt: 3 }}
           onClick={() => {
             deleteTodoMutation.mutate(todoToDelete!);
             onClose();

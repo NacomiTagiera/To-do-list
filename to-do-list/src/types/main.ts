@@ -6,7 +6,7 @@ export interface AddTaskPanelProps {
 }
 
 export interface DeleteTodoProps {
-  todoToDelete: number | undefined;
+  todoToDelete: string | undefined;
   onClose: () => void;
 }
 
@@ -24,7 +24,7 @@ export type FormikFieldProps = {
 };
 
 export interface ModifiedTodo {
-  id: number;
+  id: string;
   category: string;
   priority: string;
   task: string;
@@ -34,8 +34,12 @@ export interface NavbarProps {
   window?: () => Window;
 }
 
-export interface Todo {
-  id: number;
+export interface StyledTooltipProps {
+  children: ReactElement;
+  title: string;
+}
+
+export interface TodoWithoutId {
   category: string;
   task: string;
   priority: string;
@@ -43,13 +47,12 @@ export interface Todo {
   completed: boolean;
 }
 
+export interface Todo extends TodoWithoutId {
+  id: string;
+}
+
 export interface TodoFormikValues {
   category: string;
   task: string;
   priority: string;
-}
-
-export interface StyledTooltipProps {
-  children: ReactElement;
-  title: string;
 }

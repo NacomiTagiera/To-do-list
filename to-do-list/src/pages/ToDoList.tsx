@@ -11,7 +11,7 @@ import {
   GridToolbarQuickFilter,
   GridLinkOperator,
 } from "@mui/x-data-grid";
-import { Alert, Box, Pagination, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Pagination, Typography } from "@mui/material";
 import { Edit, HighlightOff, Visibility } from "@mui/icons-material";
 
 import { fetchListOfTodos } from "../config/backendAPI";
@@ -67,7 +67,7 @@ export default function ToDoList() {
     data: todos,
   } = useQuery("todos", fetchListOfTodos);
 
-  const [todoToDelete, setTodoToDelete] = useState<number | undefined>(
+  const [todoToDelete, setTodoToDelete] = useState<string | undefined>(
     undefined
   );
   const [todoDetails, setTodoDetails] = useState<Todo | undefined>(undefined);
@@ -199,7 +199,10 @@ export default function ToDoList() {
 
   if (isError) {
     return (
-      <Alert severity="error">Sorry, an error occured. Try again later</Alert>
+      <Alert severity="error" variant="filled" sx={{ m: "auto" }}>
+        <AlertTitle>Error</AlertTitle>
+        Sorry, an error occured. Try again later.
+      </Alert>
     );
   }
 

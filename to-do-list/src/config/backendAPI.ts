@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 import { connection } from "./config";
-import { ModifiedTodo, Todo } from "../types/main";
+import { ModifiedTodo, Todo, TodoWithoutId } from "../types/main";
 
 const settings: AxiosRequestConfig = {
   baseURL: connection.baseURL.url,
@@ -15,63 +15,51 @@ const headers = {
   accept: "application/json",
 };
 
-const fetchData = async () => {
-  const fetchedData = await backendAPI.get(`${connection.todos.url}.json`, {
+const fetchListOfTodos = async (): Promise<Todo[]> => {
+  const response = await backendAPI.get(`${connection.todos.url}.json`, {
     headers,
   });
-  return fetchedData.data;
+  const results: Todo[] = [];
+  for (const [key, value] of Object.entries(response.data)) {
+    if (value) {
+      const todo = value as Todo;
+      results.push({
+        category: todo.category,
+        completed: todo.completed,
+        createdAt: todo.createdAt,
+        id: key,
+        priority: todo.priority,
+        task: todo.task,
+      });
+    }
+  }
+  return results;
 };
 
-const fetchListOfTodos = async (): Promise<Todo[]> => {
-  const response = await fetchData();
-  return Object.values(response);
-};
-
-const createTodo = async (newTodo: Todo) => {
+const createTodo = async (newTodo: TodoWithoutId) => {
   backendAPI.post(`${connection.todos.url}.json`, newTodo);
 };
 
-const deleteTodo = async (todoId: number) => {
-  const fetchedData = await fetchData();
-  for (const [key, val] of Object.entries(fetchedData)) {
-    if (val) {
-      const value = val as Todo;
-      if (todoId === value.id) {
-        const response = await backendAPI.delete(
-          `${connection.todos.url}/${key}.json`,
-          {
-            headers,
-          }
-        );
-        return response.data;
-      }
-    }
-  }
-  return 0;
+const deleteTodo = async (todoId: string) => {
+  const response = await backendAPI.delete(
+    `${connection.todos.url}/${todoId}.json`,
+    { headers }
+  );
+  return response.data;
 };
 
 const editTodo = async (modifiedTodo: ModifiedTodo) => {
-  const fetchedData = await fetchData();
-  for (const [key, val] of Object.entries(fetchedData)) {
-    if (val) {
-      const value = val as Todo;
-      if (modifiedTodo.id === value.id) {
-        console.log(modifiedTodo.task);
-        const response = await backendAPI({
-          method: "patch",
-          url: `${connection.todos.url}/${key}.json`,
-          headers,
-          data: {
-            category: modifiedTodo.category,
-            priority: modifiedTodo.priority,
-            task: modifiedTodo.task,
-          },
-        });
-        return response;
-      }
-    }
-  }
-  return 0;
+  const response = await backendAPI({
+    method: "patch",
+    url: `${connection.todos.url}/${modifiedTodo.id}.json`,
+    headers,
+    data: {
+      category: modifiedTodo.category,
+      priority: modifiedTodo.priority,
+      task: modifiedTodo.task,
+    },
+  });
+  return response;
 };
 
-export { createTodo, deleteTodo, editTodo, fetchListOfTodos, backendAPI };
+export { backendAPI, createTodo, deleteTodo, editTodo, fetchListOfTodos };

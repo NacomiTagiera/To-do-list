@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 
 import {
   Alert,
@@ -26,12 +26,12 @@ import FormikField from "../components/FormikField";
 import {
   AddTaskPanelProps,
   ModifiedTodo,
-  Todo,
   TodoFormikValues,
+  TodoWithoutId,
 } from "../types/main";
 
 import queryClient from "../config/queryClient";
-import { createTodo, editTodo, fetchListOfTodos } from "../config/backendAPI";
+import { createTodo, editTodo } from "../config/backendAPI";
 
 export default function AddTaskPanel({
   isInEditTodo = false,
@@ -45,10 +45,8 @@ export default function AddTaskPanel({
   const [displaySuccessInfo, setDisplaySuccessInfo] = useState<boolean>(false);
   const [displayErrorInfo, setDisplayErrorInfo] = useState<boolean>(false);
 
-  const { data: todos } = useQuery("todos", fetchListOfTodos);
-
   const { mutate: createTodoMutation } = useMutation(
-    (newTodo: Todo) => {
+    (newTodo: TodoWithoutId) => {
       return createTodo(newTodo);
     },
     {
@@ -93,23 +91,19 @@ export default function AddTaskPanel({
     priority: todo?.priority || priority,
   };
 
-  const getFreeId = (todos: Todo[]): number => {
-    return todos.length ? Math.max(...todos.map((todo) => todo.id)) + 1 : 0;
-  };
-
   const onSubmit = (
     values: TodoFormikValues,
     actions: FormikHelpers<TodoFormikValues>
   ) => {
     if (!todo) {
       createTodoMutation({
-        id: getFreeId(todos ? todos : []),
         category: values.category,
         task: values.task,
         priority,
         createdAt: new Date().toISOString(),
         completed: false,
       });
+      actions.resetForm();
     } else {
       editTodoMutation({
         id: todo.id,
@@ -118,7 +112,6 @@ export default function AddTaskPanel({
         priority,
       });
     }
-    actions.resetForm();
     setDisplaySuccessInfo(true);
     setTimeout(() => {
       setDisplaySuccessInfo(false);
