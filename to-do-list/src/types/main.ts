@@ -39,14 +39,6 @@ export interface StyledTooltipProps {
   title: string;
 }
 
-export interface TodoWithoutId {
-  category: string;
-  task: string;
-  priority: string;
-  createdAt: string;
-  completed: boolean;
-}
-
 export interface Todo extends TodoWithoutId {
   id: string;
 }
@@ -55,4 +47,12 @@ export interface TodoFormikValues {
   category: string;
   task: string;
   priority: string;
+}
+
+export interface TodoWithoutId {
+  category: string;
+  task: string;
+  priority: string;
+  createdAt: string;
+  completed: boolean;
 }

@@ -2,8 +2,8 @@ import { useMutation } from "react-query";
 import { Button, Card, Dialog, Typography } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-import { deleteTodo } from "../config/backendAPI";
-import queryClient from "../config/queryClient";
+import { deleteTodo } from "../api/backendAPI";
+import queryClient from "../api/queryClient";
 import { DeleteTodoProps } from "../types/main";
 
 export default function DeleteTodo({ todoToDelete, onClose }: DeleteTodoProps) {

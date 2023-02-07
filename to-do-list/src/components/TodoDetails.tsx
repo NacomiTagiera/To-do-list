@@ -30,8 +30,13 @@ export default function TodoDetails({ todo, onClose }: DialogProps) {
           <>
             {Object.entries(todo).map(([key, value]) => (
               <Typography variant="body1" key={key}>
-                {`${key.charAt(0).toUpperCase() + key.slice(1)}`}:{" "}
-                {value ? value : "false"}
+                {key === "createdAt"
+                  ? "Creation date"
+                  : key.charAt(0).toUpperCase() + key.slice(1)}
+                :{" "}
+                {key === "createdAt"
+                  ? `${new Date(value).toLocaleDateString()}`
+                  : String(value)}
               </Typography>
             ))}
           </>

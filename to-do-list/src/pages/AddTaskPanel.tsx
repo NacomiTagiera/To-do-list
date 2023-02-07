@@ -30,8 +30,8 @@ import {
   TodoWithoutId,
 } from "../types/main";
 
-import queryClient from "../config/queryClient";
-import { createTodo, editTodo } from "../config/backendAPI";
+import queryClient from "../api/queryClient";
+import { createTodo, editTodo } from "../api/backendAPI";
 
 export default function AddTaskPanel({
   isInEditTodo = false,

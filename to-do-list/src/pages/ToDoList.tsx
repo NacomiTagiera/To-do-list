@@ -14,7 +14,7 @@ import {
 import { Alert, AlertTitle, Box, Pagination, Typography } from "@mui/material";
 import { Edit, HighlightOff, Visibility } from "@mui/icons-material";
 
-import { fetchListOfTodos } from "../config/backendAPI";
+import { fetchListOfTodos } from "../api/backendAPI";
 import { Todo } from "../types/main";
 
 import DeleteTodo from "../components/DeleteTodo";

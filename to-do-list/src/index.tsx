@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
-import queryClient from "./config/queryClient";
+import queryClient from "./api/queryClient";
 import { QueryClientProvider } from "react-query";
 
 const root = ReactDOM.createRoot(
