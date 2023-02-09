@@ -1,64 +1,20 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
 
-import {
-  DataGrid,
-  GridColDef,
-  gridPageCountSelector,
-  gridPageSelector,
-  useGridApiContext,
-  useGridSelector,
-  GridToolbarQuickFilter,
-  GridLinkOperator,
-} from "@mui/x-data-grid";
-import { Alert, AlertTitle, Box, Pagination, Typography } from "@mui/material";
+import { DataGrid, GridColDef, GridLinkOperator } from "@mui/x-data-grid";
+import { Alert, AlertTitle, Typography } from "@mui/material";
 import { Edit, HighlightOff, Visibility } from "@mui/icons-material";
 
 import { fetchListOfTodos } from "../api/backendAPI";
 import { Todo } from "../types/main";
 
-import DeleteTodo from "../components/DeleteTodo";
-import EditTodo from "../components/EditTodo";
+import CustomPagination from "../components/DataGrid/CustomPagination";
+import DeleteTodo from "../components/Todo/DeleteTodo";
+import EditTodo from "../components/Todo/EditTodo";
 import Loading from "./Loading";
-import StyledTooltip from "../components/StyledTooltip";
-import TodoDetails from "../components/TodoDetails";
-
-function QuickSearchToolbar() {
-  return (
-    <Box
-      sx={{
-        p: 0.5,
-        pb: 0,
-        textAlign: "center",
-      }}
-    >
-      <GridToolbarQuickFilter
-        placeholder="Search..."
-        quickFilterParser={(searchInput: string) =>
-          searchInput
-            .split(",")
-            .map((value) => value.trim())
-            .filter((value) => value !== "")
-        }
-      />
-    </Box>
-  );
-}
-
-function CustomPagination() {
-  const apiRef = useGridApiContext();
-  const page = useGridSelector(apiRef, gridPageSelector);
-  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
-
-  return (
-    <Pagination
-      color="primary"
-      count={pageCount}
-      page={page + 1}
-      onChange={(event, value) => apiRef.current.setPage(value - 1)}
-    />
-  );
-}
+import QuickSearchToolbar from "../components/DataGrid/QuickSearchToolbar";
+import StyledTooltip from "../components/DataGrid/StyledTooltip";
+import TodoDetails from "../components/Todo/TodoDetails";
 
 export default function ToDoList() {
   const {

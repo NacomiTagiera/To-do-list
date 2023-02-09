@@ -196,15 +196,15 @@ export default function AddTaskPanel({
             </Form>
           </Stack>
         </Formik>
-        <Dialog open={displaySuccessInfo}>
-          <Alert>Task has been successfully {todo ? "saved" : "added"}!</Alert>
-        </Dialog>
-        <Collapse in={displayErrorInfo} mountOnEnter unmountOnExit>
-          <Alert severity="error" onClose={() => setDisplayErrorInfo(false)}>
-            An error occurred! Correct the input fields and try again.
-          </Alert>
-        </Collapse>
       </Card>
+      <Dialog open={displaySuccessInfo}>
+        <Alert>Task has been successfully {todo ? "saved" : "added"}!</Alert>
+      </Dialog>
+      <Collapse in={displayErrorInfo} mountOnEnter unmountOnExit>
+        <Alert severity="error" onClose={() => setDisplayErrorInfo(false)}>
+          An error occurred! Correct the input fields and try again.
+        </Alert>
+      </Collapse>
     </ThemeProvider>
   );
 }

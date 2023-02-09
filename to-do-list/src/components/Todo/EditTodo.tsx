@@ -1,8 +1,8 @@
 import { Dialog } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-import AddTaskPanel from "../pages/AddTaskPanel";
-import { DialogProps } from "../types/main";
+import AddTaskPanel from "../../pages/AddTaskPanel";
+import { DialogProps } from "../../types/main";
 
 export default function EditTodo({ todo, onClose }: DialogProps) {
   return (

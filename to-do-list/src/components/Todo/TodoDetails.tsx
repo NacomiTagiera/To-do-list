@@ -1,7 +1,7 @@
 import { Card, Dialog, Typography } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-import { DialogProps } from "../types/main";
+import { DialogProps } from "../../types/main";
 
 export default function TodoDetails({ todo, onClose }: DialogProps) {
   return (
