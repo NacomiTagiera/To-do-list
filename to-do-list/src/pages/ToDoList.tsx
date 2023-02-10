@@ -1,19 +1,16 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
 
-import { DataGrid, GridColDef, GridLinkOperator } from "@mui/x-data-grid";
 import { Alert, AlertTitle, Typography } from "@mui/material";
-import { Edit, HighlightOff, Visibility } from "@mui/icons-material";
+import { GridRenderCellParams } from "@mui/x-data-grid/models";
 
 import { fetchListOfTodos } from "../api/backendAPI";
 import { Todo } from "../types/main";
 
-import CustomPagination from "../components/DataGrid/CustomPagination";
 import DeleteTodo from "../components/Todo/DeleteTodo";
 import EditTodo from "../components/Todo/EditTodo";
 import Loading from "./Loading";
-import QuickSearchToolbar from "../components/DataGrid/QuickSearchToolbar";
-import StyledTooltip from "../components/DataGrid/StyledTooltip";
+import MyDataGrid from "../components/DataGrid";
 import TodoDetails from "../components/Todo/TodoDetails";
 
 export default function ToDoList() {
@@ -28,126 +25,6 @@ export default function ToDoList() {
   );
   const [todoDetails, setTodoDetails] = useState<Todo | undefined>(undefined);
   const [todoToEdit, setTodoToEdit] = useState<Todo | undefined>(undefined);
-
-  const styledDataGrid = {
-    "& .MuiDataGrid-virtualScrollerRenderZone": {
-      "& .MuiDataGrid-row": {
-        "&:nth-of-type(2n)": { backgroundColor: "lightgray" },
-        "&:nth-of-type(2n-1)": { backgroundColor: "#eee" },
-      },
-    },
-    "& .MuiDataGrid-columnHeaders": {
-      backgroundColor: "lightgray",
-      color: "primary.dark",
-      fontSize: 16,
-    },
-    border: "none",
-    mx: "auto",
-  };
-
-  const iconStyles = {
-    transition: "0.3s",
-    "&:hover": {
-      opacity: "0.7",
-      cursor: "pointer",
-      transform: "scale(0.95)",
-    },
-  };
-
-  const columns: GridColDef[] = [
-    {
-      field: "category",
-      headerName: "Category",
-      type: "string",
-      align: "center",
-      headerAlign: "center",
-      flex: 1,
-      minWidth: 100,
-    },
-    {
-      field: "task",
-      headerName: "Task",
-      type: "string",
-      align: "center",
-      headerAlign: "center",
-      flex: 2,
-      minWidth: 100,
-    },
-    {
-      field: "priority",
-      headerName: "Priority",
-      type: "string",
-      align: "center",
-      headerAlign: "center",
-      flex: 1,
-      minWidth: 130,
-    },
-    {
-      field: "createdAt",
-      headerName: "Creation date",
-      type: "dateTime",
-      valueGetter: ({ value }) => value && new Date(value),
-      align: "center",
-      headerAlign: "center",
-      flex: 1,
-      minWidth: 160,
-    },
-    {
-      field: "completed",
-      headerName: "Completed",
-      type: "boolean",
-      align: "center",
-      headerAlign: "center",
-      flex: 0.5,
-      minWidth: 100,
-    },
-    {
-      field: "actions",
-      headerName: "Actions",
-      sortable: false,
-      align: "center",
-      headerAlign: "center",
-      flex: 1,
-      minWidth: 100,
-      renderCell(cellValues) {
-        return (
-          <>
-            <StyledTooltip title="Edit">
-              <Edit
-                color="primary"
-                sx={iconStyles}
-                onClick={() => {
-                  setTodoToEdit(
-                    todos?.find((todo) => todo.id === cellValues.row.id)
-                  );
-                }}
-              />
-            </StyledTooltip>
-            <StyledTooltip title="Details">
-              <Visibility
-                color="info"
-                sx={iconStyles}
-                onClick={() => {
-                  setTodoDetails(
-                    todos?.find((todo) => todo.id === cellValues.row.id)
-                  );
-                }}
-              />
-            </StyledTooltip>
-            <StyledTooltip title="Delete">
-              <HighlightOff
-                color="error"
-                sx={iconStyles}
-                onClick={() => {
-                  setTodoToDelete(cellValues.row.id);
-                }}
-              />
-            </StyledTooltip>
-          </>
-        );
-      },
-    },
-  ];
 
   if (isLoading) {
     return <Loading />;
@@ -167,30 +44,15 @@ export default function ToDoList() {
       <Typography variant="h1" component="h1" my={5} textAlign="center">
         To-do list
       </Typography>
-      <DataGrid
-        initialState={{
-          filter: {
-            filterModel: {
-              items: [],
-              quickFilterLogicOperator: GridLinkOperator.Or,
-            },
-          },
-        }}
-        components={{
-          Pagination: CustomPagination,
-          Toolbar: QuickSearchToolbar,
-        }}
-        pagination
-        rows={todos ? todos : []}
-        columns={columns}
-        density="comfortable"
-        pageSize={10}
-        autoHeight
-        columnBuffer={2}
-        columnThreshold={2}
-        disableColumnMenu
-        disableSelectionOnClick
-        sx={styledDataGrid}
+      <MyDataGrid
+        data={todos}
+        onDeleteIconClick={(cellValues) => setTodoToDelete(cellValues.row.id)}
+        onDetailsIconClick={(cellValues) =>
+          setTodoDetails(todos?.find((todo) => todo.id === cellValues.row.id))
+        }
+        onEditIconClick={(cellValues) =>
+          setTodoToEdit(todos?.find((todo) => todo.id === cellValues.row.id))
+        }
       />
       <DeleteTodo
         todoToDelete={todoToDelete}
