@@ -16,22 +16,22 @@ const headers = {
 };
 
 const fetchListOfTodos = async (): Promise<Todo[]> => {
-  const response = await backendAPI.get(`${connection.todos.url}.json`, {
-    headers,
-  });
-  const results: Todo[] = [];
-  for (const [key, value] of Object.entries(response.data)) {
-    if (value) {
-      const todo = value as Todo;
-      results.push({
-        category: todo.category,
-        completed: todo.completed,
-        createdAt: todo.createdAt,
-        id: key,
-        priority: todo.priority,
-        task: todo.task,
-      });
+  const { data } = await backendAPI.get<TodoWithoutId[]>(
+    `${connection.todos.url}.json`,
+    {
+      headers,
     }
+  );
+  const results: Todo[] = [];
+  for (const [key, value] of Object.entries(data)) {
+    results.push({
+      category: value.category,
+      completed: value.completed,
+      createdAt: value.createdAt,
+      id: key,
+      priority: value.priority,
+      task: value.task,
+    });
   }
   return results;
 };
@@ -41,11 +41,11 @@ const createTodo = async (newTodo: TodoWithoutId) => {
 };
 
 const deleteTodo = async (todoId: string) => {
-  const response = await backendAPI.delete(
+  const { data } = await backendAPI.delete(
     `${connection.todos.url}/${todoId}.json`,
     { headers }
   );
-  return response.data;
+  return data;
 };
 
 const editTodo = async (modifiedTodo: ModifiedTodo) => {

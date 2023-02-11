@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 
 import { Alert, AlertTitle, Typography } from "@mui/material";
-import { GridRenderCellParams } from "@mui/x-data-grid/models";
 
 import { fetchListOfTodos } from "../api/backendAPI";
 import { Todo } from "../types/main";

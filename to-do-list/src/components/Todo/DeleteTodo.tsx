@@ -19,7 +19,7 @@ export default function DeleteTodo({ todoToDelete, onClose }: DeleteTodoProps) {
   );
 
   return (
-    <Dialog open={!!todoToDelete}>
+    <Dialog open={!!todoToDelete} onClose={onClose}>
       <Card variant="outlined" sx={{ px: 3, py: 5, textAlign: "center" }}>
         <CancelIcon
           color="action"
