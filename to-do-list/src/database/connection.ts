@@ -1,28 +1,9 @@
-import mongoose, { ConnectOptions } from "mongoose";
+import mongoose from "mongoose";
 
-interface ConnectionOptionsExtend {
-  useNewUrlParser: boolean;
-  useUnifiedTopology: boolean;
-}
-
-const options: ConnectOptions & ConnectionOptionsExtend = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
-
-const connectMongo = async () => {
-  try {
-    mongoose.set("strictQuery", true);
-    const { connection } = await mongoose.connect(
-      process.env.MONGODB_URI?.toString()!,
-      options
-    );
-    if (connection.readyState === 1) {
-      console.log("CONNECTED DATABASE");
-    }
-  } catch (error) {
-    return Promise.reject(error);
+export default async function connectMongo() {
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection.asPromise();
+  } else {
+    return mongoose.connect(process.env.MONGODB_URI as string);
   }
-};
-
-export default connectMongo;
+}
