@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import Todo from "@/database/models/todo";
+import Todo from "@/database/models/Todo";
 import { ResponseFuncs } from "@/types";
 
 export default async function handler(

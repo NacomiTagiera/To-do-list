@@ -13,3 +13,11 @@ export interface ResponseFuncs {
   PUT?: Function;
   DELETE?: Function;
 }
+
+export interface TodoFormikValues {
+  category: string;
+  completed: boolean;
+  deadline: Date;
+  description: string;
+  title: string;
+}
