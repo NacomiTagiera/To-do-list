@@ -9,5 +9,28 @@ interface Props {
 }
 
 export default function TodoList({ todos }: Props) {
-  return <div>TodoList</div>;
+  return (
+    <Stack
+      alignItems="center"
+      justifyContent="center"
+      component="ul"
+      sx={{
+        listStyleType: "none",
+        mx: "auto",
+        my: 10,
+        width: { xs: "92%", md: "75%" },
+      }}
+    >
+      {todos.map((todo) => (
+        <TodoItem
+          key={todo.title}
+          category={todo.category}
+          completed={todo.completed}
+          deadline={todo.deadline}
+          description={todo.description}
+          title={todo.title}
+        />
+      ))}
+    </Stack>
+  );
 }

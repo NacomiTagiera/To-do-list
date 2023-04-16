@@ -1,22 +1,16 @@
+import { ObjectId } from "mongodb";
+
 export interface Todo {
-  _id: string;
+  _id?: ObjectId;
   category: string;
   completed: boolean;
-  deadline: Date;
+  deadline: string;
   description: string;
   title: string;
 }
 
-export interface ResponseFuncs {
-  GET?: Function;
-  POST?: Function;
-  PUT?: Function;
-  DELETE?: Function;
-}
-
 export interface TodoFormikValues {
   category: string;
-  completed: boolean;
   deadline: Date;
   description: string;
   title: string;

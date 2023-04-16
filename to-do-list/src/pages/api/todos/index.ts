@@ -1,26 +1,30 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import Todo from "@/database/models/todo";
-import { ResponseFuncs } from "@/types";
+import { addTodo, getTodos } from "@/lib/controller";
+import { Todo } from "@/types";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const method: keyof ResponseFuncs = req.method as keyof ResponseFuncs;
+  if (req.method === "GET") {
+    const data = await getTodos();
+    res.status(200).json({ todos: data });
+  } else if (req.method === "POST") {
+    const { category, deadline, description, title } = req.body;
+    const todo: Todo = {
+      category,
+      completed: false,
+      deadline,
+      description,
+      title,
+    };
 
-  const catcher = (error: Error) => res.status(400).json({ error });
-
-  const handleCase: ResponseFuncs = {
-    GET: async (req: NextApiRequest, res: NextApiResponse) => {
-      res.json(await Todo.find({}).catch(catcher));
-    },
-    POST: async (req: NextApiRequest, res: NextApiResponse) => {
-      res.json(await Todo.create(req.body).catch(catcher));
-    },
-  };
-
-  const response = handleCase[method];
-  if (response) response(req, res);
-  else res.status(400).json({ error: "No Response for This Request" });
+    const insertedId = await addTodo(todo);
+    res.revalidate("/todos");
+    res.revalidate("/todos" + insertedId);
+    res.status(200).json(insertedId);
+  } else {
+    res.status(405).json({ message: "Method not allowed" });
+  }
 }
