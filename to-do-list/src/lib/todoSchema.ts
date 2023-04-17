@@ -19,17 +19,12 @@ const todoSchema = yup.object().shape({
     .max(50),
   description: yup
     .string()
-    .label("Dategory")
+    .label("Description")
     .required()
     .trim()
     .strict(true)
     .min(2)
     .max(255),
-  deadline: yup
-    .date()
-    .label("Deadline")
-    .required()
-    .min(new Date(), "Deadline must be in the future"),
 });
 
 export default todoSchema;
