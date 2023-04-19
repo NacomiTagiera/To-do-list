@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 
 import connectToDatabase from "./connection";
-import { Todo } from "@/types";
+import { Todo, TodoFormikValues } from "@/types";
 
 const { MONGODB_COLLECTION = "" } = process.env;
 
@@ -42,9 +42,14 @@ export const deleteTodo = async (id: ObjectId | string) => {
   return await db.collection(MONGODB_COLLECTION).deleteOne({ _id: id });
 };
 
-export const editTodo = async (id: ObjectId | string, todo: Todo) => {
+export const editTodo = async (
+  id: ObjectId | string,
+  updatedTodo: TodoFormikValues
+) => {
   const db = await connectToDatabase();
   id = typeof id === "string" ? new ObjectId(id) : id;
 
-  return await db.collection(MONGODB_COLLECTION).replaceOne({ _id: id }, todo);
+  return await db
+    .collection(MONGODB_COLLECTION)
+    .findOneAndUpdate({ _id: id }, updatedTodo);
 };

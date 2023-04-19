@@ -20,7 +20,7 @@ export default function MyDatePicker() {
       }
 
       case "invalidDate": {
-        return "Your deadline is not valid";
+        return "Your task deadline is not valid";
       }
 
       default: {
