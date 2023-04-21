@@ -1,10 +1,13 @@
 import { useState } from "react";
 
+import axios, { AxiosError } from "axios";
+import { Form, Formik, FormikHelpers } from "formik";
+import * as Yup from "yup";
+
 import {
   Alert,
   Button,
   Card,
-  Collapse,
   createTheme,
   Dialog,
   FormControl,
@@ -12,14 +15,11 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Snackbar,
   Stack,
   ThemeProvider,
   Typography,
 } from "@mui/material";
-
-import axios, { AxiosError } from "axios";
-import { Form, Formik, FormikHelpers } from "formik";
-import * as Yup from "yup";
 
 import MyDatePicker from "./DatePicker";
 import FormikField from "./FormikField";
@@ -57,16 +57,23 @@ export default function TodoForm({ todoToEdit = undefined }: Props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Collapse in={displaySuccessInfo} mountOnEnter unmountOnExit>
-        <Alert onClose={() => setDisplaySuccessInfo(false)}>
+      <Snackbar
+        open={displaySuccessInfo}
+        autoHideDuration={6000}
+        onClose={() => setDisplaySuccessInfo(false)}
+      >
+        <Alert severity="success">
           Task has been successfully {todoToEdit ? "saved" : "added"}!
         </Alert>
-      </Collapse>
-      <Collapse in={displayErrorInfo} mountOnEnter unmountOnExit>
-        <Alert severity="error" onClose={() => setDisplayErrorInfo(false)}>
+      </Snackbar>
+      <Snackbar
+        autoHideDuration={6000}
+        onClose={() => setDisplayErrorInfo(false)}
+      >
+        <Alert severity="error">
           An error occurred! Correct the input fields and try again.
         </Alert>
-      </Collapse>
+      </Snackbar>
     </ThemeProvider>
   );
 }

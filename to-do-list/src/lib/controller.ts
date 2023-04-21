@@ -35,21 +35,34 @@ export const addTodo = async (todo: Todo): Promise<ObjectId> => {
   return response.insertedId;
 };
 
-export const deleteTodo = async (id: ObjectId | string) => {
+export const deleteTodo = async (id: ObjectId | string): Promise<number> => {
   const db = await connectToDatabase();
   id = typeof id === "string" ? new ObjectId(id) : id;
 
-  return await db.collection(MONGODB_COLLECTION).deleteOne({ _id: id });
+  return (await db.collection(MONGODB_COLLECTION).deleteOne({ _id: id }))
+    .deletedCount;
 };
 
 export const editTodo = async (
   id: ObjectId | string,
-  updatedTodo: TodoFormikValues
+  updatedTodo: TodoFormikValues | { completed: boolean }
 ) => {
   const db = await connectToDatabase();
   id = typeof id === "string" ? new ObjectId(id) : id;
 
+  const updateQuery =
+    "completed" in updatedTodo
+      ? { $set: { completed: updatedTodo.completed } }
+      : {
+          $set: {
+            category: updatedTodo.category,
+            deadline: updatedTodo.deadline,
+            description: updatedTodo.description,
+            title: updatedTodo.title,
+          },
+        };
+
   return await db
     .collection(MONGODB_COLLECTION)
-    .findOneAndUpdate({ _id: id }, updatedTodo);
+    .updateOne({ _id: id }, updateQuery);
 };
