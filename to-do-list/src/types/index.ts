@@ -1,13 +1,11 @@
 import { ObjectId } from "mongodb";
 
-export interface TodoFormikValues {
+export interface Todo {
+  _id?: ObjectId;
   category: string;
+  completed: boolean;
   deadline: string;
   description: string;
   title: string;
 }
-
-export interface Todo extends TodoFormikValues {
-  _id?: ObjectId;
-  completed: boolean;
-}
+export type FormValues = Omit<Todo, "_id" | "completed">;

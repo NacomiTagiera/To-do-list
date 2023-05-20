@@ -1,6 +1,6 @@
 import TodoList from "@/components/Todo/TodoList";
 import { Todo } from "@/types";
-import { getTodos } from "@/lib/controller";
+import { getTodos } from "@/database/controller";
 
 interface Props {
   todos: Todo[];
