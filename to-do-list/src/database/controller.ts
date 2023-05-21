@@ -7,7 +7,7 @@ export const getTodos = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const db = await connectToDatabase();
 
-    const data = await db.collection("tasks").find().toArray();
+    const data = await db.find().toArray();
     const todos = JSON.parse(JSON.stringify(data));
 
     res.status(200).json({ todos });
@@ -21,9 +21,7 @@ export const getTodo = async (req: NextApiRequest, res: NextApiResponse) => {
     const id = req.query.id as string;
 
     const db = await connectToDatabase();
-    const todo = await db
-      .collection("tasks")
-      .findOne({ _id: new ObjectId(id) });
+    const todo = await db.findOne({ _id: new ObjectId(id) });
 
     if (!todo) {
       res.status(404).json({ error: "Todo not found" });
@@ -47,7 +45,7 @@ export const addTodo = async (req: NextApiRequest, res: NextApiResponse) => {
     };
 
     const db = await connectToDatabase();
-    const response = await db.collection("tasks").insertOne(todo);
+    const response = await db.insertOne(todo);
 
     const insertedId = response.insertedId;
     res.status(200).json(insertedId);
@@ -61,9 +59,7 @@ export const deleteTodo = async (req: NextApiRequest, res: NextApiResponse) => {
     const id = req.query.id as string;
 
     const db = await connectToDatabase();
-    const result = await db
-      .collection("tasks")
-      .deleteOne({ _id: new ObjectId(id) });
+    const result = await db.deleteOne({ _id: new ObjectId(id) });
     const deletedCount = result.deletedCount;
 
     if (deletedCount === 0) {
@@ -83,9 +79,7 @@ export const editTodo = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const db = await connectToDatabase();
     const updateQuery = { $set: { completed } };
-    const result = await db
-      .collection("tasks")
-      .updateOne({ _id: new ObjectId(id) }, updateQuery);
+    const result = await db.updateOne({ _id: new ObjectId(id) }, updateQuery);
 
     if (result.modifiedCount === 0) {
       res.status(404).json({ error: "Todo not found" });
