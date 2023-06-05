@@ -1,5 +1,7 @@
+import { ObjectId } from "mongodb";
+
 export interface Collection {
-  _id: string;
+  _id?: ObjectId;
   name: string;
   todos: Todo[];
 }
